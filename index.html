@@ -5,61 +5,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Affiliate Marketing</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Correctly linked CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
             height: 100vh;
+            background-color: black;
         }
 
         .hero-bg {
+            display: grid;
+            align-items: center;
             background-image: url('https://cdn.pixabay.com/photo/2015/08/14/07/46/gradient-888101_1280.jpg');
             background-size: cover;
             background-position: center;
+            height: 100vh;
         }
 
+        .logo{
+            position: absolute;
+            top: -70px;
+            left: 0px;
+           width: 60px;
+        }
+
+        .logo::before{
+            position: relative;
+        }
+
+        .title{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            font-weight: 100;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 10px 10px 10px 10px solid black;
+            font-weight: 1000;
+            color: black;
+            font-size: 12px;
+        }
+
+        .title:hover{
+            background-color: #3bbf65;
+        }
+        
         .cd {
-            margin: 10px 10px 10px 10px;
+            margin: 10px;
             max-width: 500px;
         }
 
         img {
-            margin: 10px;
             width: 100%;
-            object-fit: cover;
+            height: 200px;
+            object-fit: contain;
+            object-position: center;
         }
 
-        /* Custom styles for the search input */
         .search-input {
             border-radius: 0.375rem;
-            border: 1px solid #d1d5db; /* Gray border */
+            border: 1px solid #d1d5db;
             transition: border-color 0.2s ease-in-out;
         }
 
         .search-input:focus {
-            border-color: #2563eb; /* Blue border on focus */
-            outline: none; /* Remove outline */
+            border-color: #4ade80; /* Green border on focus */
+            outline: none;
         }
 
         .search-button {
-            background-color: #2563eb; /* Blue background */
+            background-color: #4ade80; /* Apple green background */
             color: white;
             border-radius: 0.375rem;
             transition: background-color 0.2s ease-in-out;
         }
 
         .search-button:hover {
-            background-color: #1d4ed8; /* Darker blue on hover */
+            background-color: #3bbf65; /* Darker green on hover */
         }
 
         .product-card {
+            margin: 7px;
             transition: transform 0.2s ease-in-out;
+            max-width: 500px;
+            font-size: 14px;
         }
 
         .product-card:hover {
-            transform: scale(1.05); /* Slight zoom effect on hover */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 50; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .loading {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4ade80;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            img {
+                width: 100%;
+                align-items: center;
+                text-align: center;
+                margin-bottom: -30px;
+            }
+
+            .product-card {
+                max-height: 500px;
+                font-size: 14px;
+            }
+
+            .tit {
+                font-size: 14px;
+            }
+        }
+
+        /* Loading Card Styles */
+        .loading-card {
+            background-color: #e0e0e0; /* Light grey */
+            height: 350px;
+            border-radius: 0.375rem;
+            margin: 7px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        
     </style>
 </head>
 
@@ -68,9 +198,12 @@
     <!-- Hero Section -->
     <header class="hero-bg text-white py-24">
         <div class="container mx-auto text-center">
+            <img src="logo.png" class="logo" alt="">
+            <a href="#products" class=" text-gray-800 py-3 px-6    transition duration-300 title">Start Shopping</a>
+           
             <h1 class="text-5xl font-extrabold mb-4">Unleash Your Shopping Experience</h1>
             <p class="text-xl mb-8">Discover the best deals and products on Amazon</p>
-            <a href="#products" class="bg-yellow-400 text-gray-800 py-3 px-6 rounded-full shadow-lg hover:bg-yellow-500 transition duration-300">Start Shopping</a>
+            <a href="#products" class="bg-white text-gray-800 py-3 px-6 shadow-lg hover:bg-green-100 transition duration-300" style="border-radius: 15px; color:rgb(0, 0, 0); font-weight:1000;">Explore</a>
         </div>
     </header>
 
@@ -86,21 +219,51 @@
                 <button id="search-btn" class="search-button ml-2 py-2 px-4 rounded-md">Search</button>
             </div>
 
-            <div id="product-container" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div id="product-container" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+                <!-- Loading Placeholders -->
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
+                <div class="loading-card">
+                    <div class="shimmer"></div>
+                </div>
                 <!-- Product Cards will be dynamically inserted here -->
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
+    <!-- Modal for Loading Animation -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">Loading...</h2>
+            <div class="loading"></div>
+            <p class="mt-4">Please wait while we redirect you...</p>
+        </div>
+    </div>
 
     <!-- Import Firebase modules -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
             authDomain: "dropshipping-98eb5.firebaseapp.com",
@@ -111,74 +274,75 @@
             measurementId: "G-BVZR8HY1SR"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Global variable to hold products
         let products = [];
 
-        // Fetch and display products
         function fetchProducts() {
-            const productsRef = ref(database, 'products'); // Adjust this to your database structure
+            const productsRef = ref(database, 'products');
             onValue(productsRef, (snapshot) => {
-                products = snapshot.val();
-                displayProducts(products);
+                if (snapshot.exists()) {
+                    products = snapshot.val();
+                   
+                    displayProducts(products);
+                } else {
+                    console.error("No data available");
+                }
+            }, (error) => {
+                console.error("Error fetching data: ", error);
             });
         }
-
-        // Function to display products
+        
         function displayProducts(products) {
             const productContainer = document.getElementById('product-container');
-            productContainer.innerHTML = ''; // Clear existing products
-
+            productContainer.innerHTML = '';
+        
+            if (!products || Object.keys(products).length === 0) {
+                productContainer.innerHTML = '<p>No products found.</p>'; // Show message if no products
+                return;
+            }
+        
             for (let key in products) {
                 const product = products[key];
                 const productCard = `
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden transform product-card">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <img src="${product.image}" alt="${product.name}">
                         <div class="p-4">
-                            <h3 class="font-bold text-lg">${product.name}</h3>
-                            <p class="mt-2 text-gray-600">$${product.price}</p>
+                            <h3 class="tit">${product.name}</h3>
+                            <p class="mt-2 text-gray-600">₹${product.price}</p>
                             <div class="flex items-center mt-1">
                                 <span class="text-yellow-500">${'★'.repeat(product.stars)}${'☆'.repeat(5 - product.stars)}</span>
                                 <span class="text-gray-500 text-sm ml-2">(${product.reviews} Reviews)</span>
                             </div>
-                            <a href="${product.link}" target="_blank" class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-300 hover:bg-blue-700">View Product</a>
+                            <button class="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-300 hover:bg-blue-700" onclick="openLoadingModal('${product.link}')">View Product</button>
                         </div>
                     </div>
                 `;
-                productContainer.innerHTML += productCard; // Append the product card to the container
+                productContainer.innerHTML += productCard;
             }
         }
+        
 
-        // BFS function to search products
-        function bfsSearch(products, query) {
-            const result = [];
-            const queue = Object.values(products); // Convert products object to array for BFS
+        function showProduct(productId) {
+            const modal = document.getElementById('loading-modal');
+            modal.style.display = 'flex';
 
-            while (queue.length > 0) {
-                const product = queue.shift();
-                if (product.name.toLowerCase().includes(query.toLowerCase())) {
-                    result.push(product);
-                }
-            }
-            return result;
+            setTimeout(() => {
+                modal.style.display = 'none';
+                // Redirect or show product details here
+                alert(`Product ID: ${productId}`);
+            }, 2000);
         }
 
-        // Search button event listener
         document.getElementById('search-btn').addEventListener('click', () => {
-            const query = document.getElementById('search-input').value.trim();
-            if (query) {
-                const filteredProducts = bfsSearch(products, query);
-                displayProducts(filteredProducts); // Display filtered products
-            } else {
-                displayProducts(products); // Display all products if search query is empty
-            }
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filteredProducts = products.filter(product => product.title.toLowerCase().includes(query));
+            displayProducts(filteredProducts);
         });
 
-        // Call the function to fetch products on page load
-        window.onload = fetchProducts;
+        fetchProducts();
+
     </script>
 </body>
 
