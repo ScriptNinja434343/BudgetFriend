@@ -1,310 +1,310 @@
-<html>
-<head>
-    <title>HORNE - Beds</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            border-bottom: 1px solid #eaeaea;
-            position: relative;
-        }
-        .header .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .header .right-icons {
-            display: flex;
-            gap: 15px;
-        }
-        .header .right-icons i {
-            font-size: 18px;
-        }
-        .header .right-icons .cart {
-            position: relative;
-        }
-        .header .right-icons .cart::after {
-            content: '0';
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background: #000;
-            color: #fff;
-            border-radius: 50%;
-            padding: 2px 5px;
-            font-size: 12px;
-        }
-        .sub-header {
-            text-align: center;
-            padding: 10px 0;
-            font-size: 14px;
-            color: #888;
-        }
-        .main-content {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        .main-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            margin: 0;
-        }
-        .main-content .category {
-            font-size: 14px;
-            color: #d4a373;
-            margin-bottom: 20px;
-        }
-        
-        .filters .right-filters {
-            display: flex;
-            gap: 20px;
-        }
-        .product-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        .product-item {
-            text-align: center;
-            border: 1px solid #eaeaea;
-            padding: 20px;
-            border-radius: 8px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-        .product-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-        .product-item h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            margin: 10px 0 5px;
-        }
-        .product-item p {
-            margin: 5px 0;
-            color: #888;
-        }
-        .product-item .price {
-            font-weight: bold;
-        }
-        .stars {
-            display: flex;
-            justify-content: center;
-            margin: 5px 0;
-        }
-        .stars i {
-            color: #ffd700;
-        }
-        .shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
+    <html>
+    <head>
+        <title>Budget Friendly</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                margin: 0;
+                padding: 0;
             }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-        .shimmer-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
-            background: #fff;
-        }
-        .shimmer-wrapper .shimmer-img {
-            width: 100%;
-            height: 150px;
-            border-radius: 8px;
-        }
-        .shimmer-wrapper .shimmer-text {
-            width: 80%;
-            height: 20px;
-            margin: 10px 0;
-            border-radius: 4px;
-        }
-        @media (max-width: 768px) {
-            .product-list {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .filters {
-                display: none;
-            }
-            .header .nav {
-                display: none;
-            }
-            .header .menu-icon {
-                display: block;
-                cursor: pointer;
-            }
-            .header .nav-mobile {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                border-top: 1px solid #eaeaea;
-                z-index: 1000;
-            }
-            .header .nav-mobile span {
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 padding: 10px 20px;
                 border-bottom: 1px solid #eaeaea;
+                position: relative;
             }
-            .header .nav-mobile.show {
+            .header .logo {
+                font-family: 'Playfair Display', serif;
+                font-size: 24px;
+                font-weight: bold;
+            }
+            .header .right-icons {
                 display: flex;
+                gap: 15px;
             }
-        }
-    </style>
-    <script type="module">
-        // Import the necessary Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
-            authDomain: "dropshipping-98eb5.firebaseapp.com",
-            projectId: "dropshipping-98eb5",
-            storageBucket: "dropshipping-98eb5.appspot.com",
-            messagingSenderId: "904925867242",
-            appId: "1:904925867242:web:af0abda866826e92f8fb93",
-            measurementId: "G-BVZR8HY1SR"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Fetch products from Firebase
-        function fetchProducts() {
-            const productsRef = ref(database, 'products');
-            onValue(productsRef, (snapshot) => {
-                const products = snapshot.val();
-                displayProducts(products);
-            });
-        }
-
-        // Display products on the page
-        function displayProducts(products) {
-            const productList = document.querySelector('.product-list');
-            productList.innerHTML = ''; // Clear existing products
-
-            for (const key in products) {
-                if (products.hasOwnProperty(key)) {
-                    const product = products[key];
-                    const productItem = document.createElement('div');
-                    productItem.className = 'product-item';
-                    productItem.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h2>${product.name}</h2>
-                        <div class="stars">${getStars(product.stars)}</div>
-                        <p>${product.stars} stars | ${product.reviews} reviews</p>
-                        <p class="price">$${product.price}</p>
-                    `;
-                    productItem.onclick = () => {
-                        window.location.href = product.link;
-                    };
-                    productList.appendChild(productItem);
+            .header .right-icons i {
+                font-size: 18px;
+            }
+            .header .right-icons .cart {
+                position: relative;
+            }
+            .header .right-icons .cart::after {
+                content: '0';
+                position: absolute;
+                top: -5px;
+                right: -10px;
+                background: #000;
+                color: #fff;
+                border-radius: 50%;
+                padding: 2px 5px;
+                font-size: 12px;
+            }
+            .sub-header {
+                text-align: center;
+                padding: 10px 0;
+                font-size: 14px;
+                color: #888;
+            }
+            .main-content {
+                text-align: center;
+                padding: 40px 20px;
+            }
+            .main-content h3 {
+                font-family: 'Playfair Display', serif;
+                font-size: 22px;
+                margin: 0;
+            }
+            .main-content .category {
+                font-size: 14px;
+                color: #d4a373;
+                margin-bottom: 20px;
+            }
+            
+            .filters .right-filters {
+                display: flex;
+                gap: 20px;
+            }
+            .product-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+                padding: 20px;
+            }
+            .product-item {
+                text-align: center;
+                border: 1px solid #eaeaea;
+                padding: 20px;
+                border-radius: 8px;
+                background: #fff;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                cursor: pointer;
+            }
+            .product-item img {
+                width: 100%;
+                height: 150px;
+                object-fit: contain;
+                border-radius: 8px;
+            }
+            .product-item h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: 18px;
+                margin: 10px 0 5px;
+            }
+            .product-item p {
+                margin: 5px 0;
+                color: #888;
+            }
+            .product-item .price {
+                font-weight: bold;
+            }
+            .stars {
+                display: flex;
+                justify-content: center;
+                margin: 5px 0;
+            }
+            .stars i {
+                color: #ffd700;
+            }
+            .shimmer {
+                background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+                background-size: 200% 100%;
+                animation: shimmer 1.5s infinite;
+            }
+            @keyframes shimmer {
+                0% {
+                    background-position: -200% 0;
+                }
+                100% {
+                    background-position: 200% 0;
                 }
             }
-        }
+            .shimmer-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+                border: 1px solid #eaeaea;
+                border-radius: 8px;
+                background: #fff;
+            }
+            .shimmer-wrapper .shimmer-img {
+                width: 100%;
+                height: 150px;
+                border-radius: 8px;
+            }
+            .shimmer-wrapper .shimmer-text {
+                width: 80%;
+                height: 20px;
+                margin: 10px 0;
+                border-radius: 4px;
+            }
+            @media (max-width: 768px) {
+                .product-list {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .filters {
+                    display: none;
+                }
+                .header .nav {
+                    display: none;
+                }
+                .header .menu-icon {
+                    display: block;
+                    cursor: pointer;
+                }
+                .header .nav-mobile {
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    background: #fff;
+                    border-top: 1px solid #eaeaea;
+                    z-index: 1000;
+                }
+                .header .nav-mobile span {
+                    padding: 10px 20px;
+                    border-bottom: 1px solid #eaeaea;
+                }
+                .header .nav-mobile.show {
+                    display: flex;
+                }
+            }
+        </style>
+        <script type="module">
+            // Import the necessary Firebase modules
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+            import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // Generate star rating HTML
-        function getStars(rating) {
-            const fullStars = Math.floor(rating);
-            const halfStar = rating % 1 !== 0;
-            let starsHTML = '';
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+                authDomain: "dropshipping-98eb5.firebaseapp.com",
+                projectId: "dropshipping-98eb5",
+                storageBucket: "dropshipping-98eb5.appspot.com",
+                messagingSenderId: "904925867242",
+                appId: "1:904925867242:web:af0abda866826e92f8fb93",
+                measurementId: "G-BVZR8HY1SR"
+            };
 
-            for (let i = 0; i < fullStars; i++) {
-                starsHTML += '<i class="fas fa-star"></i>';
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+
+            // Fetch products from Firebase
+            function fetchProducts() {
+                const productsRef = ref(database, 'products');
+                onValue(productsRef, (snapshot) => {
+                    const products = snapshot.val();
+                    displayProducts(products);
+                });
             }
 
-            if (halfStar) {
-                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            // Display products on the page
+            function displayProducts(products) {
+                const productList = document.querySelector('.product-list');
+                productList.innerHTML = ''; // Clear existing products
+
+                for (const key in products) {
+                    if (products.hasOwnProperty(key)) {
+                        const product = products[key];
+                        const productItem = document.createElement('div');
+                        productItem.className = 'product-item';
+                        productItem.innerHTML = `
+                            <img src="${product.image}" alt="${product.name}">
+                            <h2>${product.name}</h2>
+                            <div class="stars">${getStars(product.stars)}</div>
+                            <p>${product.stars} stars | ${product.reviews} reviews</p>
+                            <p class="price">$${product.price}</p>
+                        `;
+                        productItem.onclick = () => {
+                            window.location.href = product.link;
+                        };
+                        productList.appendChild(productItem);
+                    }
+                }
             }
 
-            for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
-                starsHTML += '<i class="far fa-star"></i>';
+            // Generate star rating HTML
+            function getStars(rating) {
+                const fullStars = Math.floor(rating);
+                const halfStar = rating % 1 !== 0;
+                let starsHTML = '';
+
+                for (let i = 0; i < fullStars; i++) {
+                    starsHTML += '<i class="fas fa-star"></i>';
+                }
+
+                if (halfStar) {
+                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                }
+
+                for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+                    starsHTML += '<i class="far fa-star"></i>';
+                }
+
+                return starsHTML;
             }
 
-            return starsHTML;
-        }
-
-        // Show shimmer effect while loading
-        function showShimmerEffect() {
-            const productList = document.querySelector('.product-list');
-            for (let i = 0; i < 6; i++) {
-                const shimmerWrapper = document.createElement('div');
-                shimmerWrapper.className = 'shimmer-wrapper';
-                shimmerWrapper.innerHTML = `
-                    <div class="shimmer shimmer-img"></div>
-                    <div class="shimmer shimmer-text"></div>
-                    <div class="shimmer shimmer-text"></div>
-                `;
-                productList.appendChild(shimmerWrapper);
+            // Show shimmer effect while loading
+            function showShimmerEffect() {
+                const productList = document.querySelector('.product-list');
+                for (let i = 0; i < 6; i++) {
+                    const shimmerWrapper = document.createElement('div');
+                    shimmerWrapper.className = 'shimmer-wrapper';
+                    shimmerWrapper.innerHTML = `
+                        <div class="shimmer shimmer-img"></div>
+                        <div class="shimmer shimmer-text"></div>
+                        <div class="shimmer shimmer-text"></div>
+                    `;
+                    productList.appendChild(shimmerWrapper);
+                }
             }
-        }
 
-        // Toggle mobile navigation
-        function toggleMobileNav() {
-            const navMobile = document.querySelector('.nav-mobile');
-            navMobile.classList.toggle('show');
-        }
+            // Toggle mobile navigation
+            function toggleMobileNav() {
+                const navMobile = document.querySelector('.nav-mobile');
+                navMobile.classList.toggle('show');
+            }
 
-        // Fetch products on page load
-        window.onload = () => {
-            showShimmerEffect();
-            fetchProducts();
-        };
+            // Fetch products on page load
+            window.onload = () => {
+                showShimmerEffect();
+                fetchProducts();
+            };
 
-        // Hide product details in console
-        console.log = function() {};
-        console.warn = function() {};
-        console.error = function() {};
-    </script>
-</head>
-<body>
-    <div class="header">
-        <div class="logo">BF</div>
-      
-       
-       
-    </div>
-    <div class="sub-header">GET MORE OFFERED PRODUCTS FROM AMAZON</div>
-    <div class="main-content">
-
-        <h3>Budget Friendly </h3>
-    </div>
-    <div class="filters">
-        <div class="right-filters">
-            <!-- Removed all buttons -->
+            // Hide product details in console
+            console.log = function() {};
+            console.warn = function() {};
+            console.error = function() {};
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">BF</div>
+        
+        
+        
         </div>
-    </div>
-    <div class="product-list">
-        <!-- Products will be dynamically inserted here -->
-    </div>
-</body>
-</html>
+        <div class="sub-header">GET MORE OFFERED PRODUCTS FROM AMAZON</div>
+        <div class="main-content">
+
+            <h3>Budget Friendly </h3>
+        </div>
+        <div class="filters">
+            <div class="right-filters">
+                <!-- Removed all buttons -->
+            </div>
+        </div>
+        <div class="product-list">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </body>
+    </html>
