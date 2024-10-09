@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Add a New Product</h1>
+        <form id="addProductForm">
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" required>
+
+            <label for="productDescription">Product Description:</label>
+            <textarea id="productDescription" required></textarea>
+
+            <label for="productPrice">Product Price:</label>
+            <input type="number" id="productPrice" step="0.01" required>
+
+            <label for="productImage">Product Image URL:</label>
+            <input type="url" id="productImage" required>
+
+            <label for="productStars">Product Stars:</label>
+            <select id="productStars" required>
+                <option value="1">1 Star</option>
+                <option value="1.1">1.1 Star</option>
+                <option value="1.2">1.2 Star</option>
+                <option value="1.3">1.3 Star</option>
+                <option value="1.4">1.4 Star</option>
+                <option value="1.5">1.5 Star</option>
+
+                <option value="2">2 Stars</option>
+                <option value="2.1">2 Stars</option>
+                <option value="2.2">2 Stars</option>
+                <option value="2.3">2 Stars</option>
+                <option value="2.4">2 Stars</option>
+                <option value="2.5">2 Stars</option>
+
+                <option value="3">3 Stars</option>
+                <option value="3.1">3.1 Stars</option>
+                <option value="3.2">3.2 Stars</option>
+                <option value="3.3">3.3 Stars</option>
+                <option value="3.4">3.4 Stars</option>
+                <option value="3.5">3.5 Stars</option>
+
+                <option value="4">4 Stars</option>
+                <option value="4.1">4.1 Stars</option>
+                <option value="4.2">4.2 Stars</option>
+                <option value="4.3">4.3 Stars</option>
+                <option value="4.4">4.4 Stars</option>
+                <option value="4.5">4.5 Stars</option>
+
+                <option value="5">5 Stars</option>
+                <option value="5.1">5 Stars</option>
+                <option value="5.1">5 Stars</option>
+                <option value="5.1">5 Stars</option>
+                <option value="5.1">5 Stars</option>
+                <option value="5.1">5 Stars</option>
+
+            </select>
+
+            <label for="productReviews">Product Reviews:</label>
+            <input type="number" id="productReviews" required>
+
+            <label for="productLink">Product Link:</label>
+            <input type="url" id="productLink" required>
+
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+            authDomain: "dropshipping-98eb5.firebaseapp.com",
+            projectId: "dropshipping-98eb5",
+            storageBucket: "dropshipping-98eb5.appspot.com",
+            messagingSenderId: "904925867242",
+            appId: "1:904925867242:web:af0abda866826e92f8fb93",
+            measurementId: "G-BVZR8HY1SR"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        document.getElementById('addProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const productName = document.getElementById('productName').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productImage = document.getElementById('productImage').value;
+            const productStars = document.getElementById('productStars').value;
+            const productReviews = document.getElementById('productReviews').value;
+            const productLink = document.getElementById('productLink').value;
+
+            // Add product to Firebase
+            const newProductKey = database.ref().child('products').push().key;
+            const productData = {
+                name: productName,
+                description: productDescription,
+                price: productPrice,
+                image: productImage,
+                stars: productStars,
+                reviews: productReviews,
+                link: productLink
+            };
+
+            database.ref('products/' + newProductKey).set(productData)
+                .then(() => {
+                    alert('Product added successfully!');
+                    document.getElementById('addProductForm').reset();
+                })
+                .catch((error) => {
+                    console.error('Error adding product: ', error);
+                });
+        });
+    </script>
+</body>
+</html>
