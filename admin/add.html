@@ -1,179 +1,194 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #F0F0F0;
+            color: #333333;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
-
         .container {
-            background: white;
+            display: flex;
+            flex-direction: row;
+            width: 80%;
+            max-width: 1200px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .left {
+            flex: 1;
+            background: url('https://placehold.co/600x800') no-repeat center center;
+            background-size: cover;
+            position: relative;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
         }
-
-        h1 {
-            text-align: center;
+        .left .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333333;
         }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
+        .left .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #FFFFFF;
         }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="url"],
-        textarea,
-        select {
-            width: 95%;
-            padding: 10px;
+        .left .back-button i {
+            margin-left: 10px;
+        }
+        .left .caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: 500;
+            color: #FFFFFF;
+        }
+        .right {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right h1 {
+            font-size: 32px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            color: #333333;
         }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
+        .right p {
+            margin-bottom: 20px;
+            color: #666666;
+        }
+        .right form {
+            display: flex;
+            flex-direction: column;
+        }
+        .right form input {
+            background-color: #F0F0F0;
             border: none;
-            border-radius: 3px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #333333;
+            font-size: 16px;
+        }
+        .right form input::placeholder {
+            color: #999999;
+        }
+        .right form button {
+            background-color: #000000;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            color: #FFFFFF;
+            font-size: 16px;
             cursor: pointer;
         }
-
-        button:hover {
-            background-color: #218838;
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+            }
+            .left {
+                width: 100%;
+                height: 1000px;
+                background-size: cover;
+                flex: 1;
+            }
+            .right {
+                padding: 20px;
+            }
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Add a New Product</h1>
-        <form id="addProductForm">
-            <label for="productName">Product Name:</label>
-            <input type="text" id="productName" required>
-
-            <label for="productDescription">Product Description:</label>
-            <textarea id="productDescription" required></textarea>
-
-            <label for="productPrice">Product Price:</label>
-            <input type="number" id="productPrice" step="0.01" required>
-
-            <label for="productImage">Product Image URL:</label>
-            <input type="url" id="productImage" required>
-
-            <label for="productStars">Product Stars:</label>
-            <select id="productStars" required>
-                <option value="1">1 Star</option>
-                <option value="1.1">1.1 Star</option>
-                <option value="1.2">1.2 Star</option>
-                <option value="1.3">1.3 Star</option>
-                <option value="1.4">1.4 Star</option>
-                <option value="1.5">1.5 Star</option>
-
-                <option value="2">2 Stars</option>
-                <option value="2.1">2 Stars</option>
-                <option value="2.2">2 Stars</option>
-                <option value="2.3">2 Stars</option>
-                <option value="2.4">2 Stars</option>
-                <option value="2.5">2 Stars</option>
-
-                <option value="3">3 Stars</option>
-                <option value="3.1">3.1 Stars</option>
-                <option value="3.2">3.2 Stars</option>
-                <option value="3.3">3.3 Stars</option>
-                <option value="3.4">3.4 Stars</option>
-                <option value="3.5">3.5 Stars</option>
-
-                <option value="4">4 Stars</option>
-                <option value="4.1">4.1 Stars</option>
-                <option value="4.2">4.2 Stars</option>
-                <option value="4.3">4.3 Stars</option>
-                <option value="4.4">4.4 Stars</option>
-                <option value="4.5">4.5 Stars</option>
-
-                <option value="5">5 Stars</option>
-                <option value="5.1">5 Stars</option>
-                <option value="5.1">5 Stars</option>
-                <option value="5.1">5 Stars</option>
-                <option value="5.1">5 Stars</option>
-                <option value="5.1">5 Stars</option>
-
-            </select>
-
-            <label for="productReviews">Product Reviews:</label>
-            <input type="number" id="productReviews" required>
-
-            <label for="productLink">Product Link:</label>
-            <input type="url" id="productLink" required>
-
-            <button type="submit">Add Product</button>
-        </form>
+     
+        <div class="right">
+            <h1>Product Details</h1>
+            <form id="productForm">
+                <input type="text" id="image" placeholder="Image URL" oninput="updateImage()">
+                <input type="text" id="name" placeholder="Product Name">
+                <input type="number" id="price" placeholder="Price">
+                <input type="number" step="0.1" id="stars" placeholder="Stars">
+                <input type="number" id="reviews" placeholder="Reviews">
+                <input type="text" id="link" placeholder="Product Link">
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
     </div>
 
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
     <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
             apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
             authDomain: "dropshipping-98eb5.firebaseapp.com",
             projectId: "dropshipping-98eb5",
             storageBucket: "dropshipping-98eb5.appspot.com",
             messagingSenderId: "904925867242",
             appId: "1:904925867242:web:af0abda866826e92f8fb93",
-            measurementId: "G-BVZR8HY1SR"
+            measurementId: "G-BVZR8HY1SR",
+            databaseURL: "https://dropshipping-98eb5-default-rtdb.firebaseio.com"
         };
-
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
 
-        document.getElementById('addProductForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Reference to the products collection
+        var productsRef = firebase.database().ref('products');
 
-            const productName = document.getElementById('productName').value;
-            const productDescription = document.getElementById('productDescription').value;
-            const productPrice = document.getElementById('productPrice').value;
-            const productImage = document.getElementById('productImage').value;
-            const productStars = document.getElementById('productStars').value;
-            const productReviews = document.getElementById('productReviews').value;
-            const productLink = document.getElementById('productLink').value;
+        // Form submission
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-            // Add product to Firebase
-            const newProductKey = database.ref().child('products').push().key;
-            const productData = {
-                name: productName,
-                description: productDescription,
-                price: productPrice,
-                image: productImage,
-                stars: productStars,
-                reviews: productReviews,
-                link: productLink
-            };
+            var image = document.getElementById('image').value;
+            var name = document.getElementById('name').value;
+            var price = document.getElementById('price').value;
+            var stars = document.getElementById('stars').value;
+            var reviews = document.getElementById('reviews').value;
+            var link = document.getElementById('link').value;
 
-            database.ref('products/' + newProductKey).set(productData)
-                .then(() => {
-                    alert('Product added successfully!');
-                    document.getElementById('addProductForm').reset();
-                })
-                .catch((error) => {
-                    console.error('Error adding product: ', error);
-                });
+            var newProductRef = productsRef.push();
+            newProductRef.set({
+                image: image,
+                name: name,
+                price: price,
+                stars: stars,
+                reviews: reviews,
+                link: link
+            });
+
+            // Clear the form
+            document.getElementById('productForm').reset();
         });
+
+        // Update the left section with the new image instantly
+        function updateImage() {
+            var imageUrl = document.getElementById('image').value;
+            document.getElementById('imageSection').style.backgroundImage = 'url(' + imageUrl + ')';
+        }
     </script>
 </body>
 </html>
