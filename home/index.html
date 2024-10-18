@@ -40,14 +40,9 @@
             font-weight: bold;
             color: white;
             letter-spacing: 5px;
-            font-weight: 100;
         }
-        .header .right-icons {
-            display: flex;
-            gap: 15px;
-        }
-        .header .right-icons i {
-            font-size: 18px;
+        .header .search-container {
+            margin-left: auto; /* Align search to the right */
         }
         .sub-header {
             text-align: center;
@@ -63,10 +58,7 @@
             font-family: 'Playfair Display', serif;
             font-size: 22px;
             margin: 0;
-        }
-        .search-container {
-            text-align: center;
-            margin: 5px 0;
+            color: #590176;
         }
         .search-container input {
             padding: 10px;
@@ -87,7 +79,7 @@
             border: 1px solid #ffffff;
             padding: 20px;
             border-radius: 20px;
-            background: #ffffff;
+            background:  #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -148,10 +140,6 @@
             .product-list {
                 grid-template-columns: repeat(2, 1fr);
             }
-        }
-
-        h3 {
-            color: #590176;
         }
 
         .modal {
@@ -252,103 +240,77 @@
                 if (products.hasOwnProperty(key)) {
                     const product = products[key];
                     const productItem = document.createElement('div');
-                    productItem.classList.add('product-item');
-
+                    productItem.className = 'product-item';
                     productItem.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
+                        <img src="${product.image}" alt="${product.name}" />
                         <h2>${product.name}</h2>
-                        <p>${product.description}</p>
-                        <div class="stars">${'★'.repeat(product.rating)}${'☆'.repeat(5 - product.rating)}</div>
-                        <p class="price">$${product.price}</p>
+                        <p class="price">₹${product.price}</p>
+                        <div class="stars">${'⭐'.repeat(product.rating)}</div>
                     `;
-
+                    productItem.onclick = () => showProductDetails(product);
                     productList.appendChild(productItem);
                 }
             }
         }
 
-        // Implement search functionality
-        function searchProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filteredProducts = productsData.filter(product => 
-                product.name.toLowerCase().includes(searchTerm) || 
-                product.description.toLowerCase().includes(searchTerm)
-            );
-            displayProducts(filteredProducts);
+        // Show product details in a modal
+        function showProductDetails(product) {
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.modal-content');
+            modalContent.innerHTML = `
+                <span class="close-btn" onclick="closeModal()">Close</span>
+                <h2>${product.name}</h2>
+                <img src="${product.image}" alt="${product.name}" style="width: 100%;" />
+                <p class="price">₹${product.price}</p>
+                <p>${product.description}</p>
+            `;
+            modal.style.display = 'flex'; // Show modal
         }
 
-        // Show modal for network issues
-        function showModal() {
-            document.getElementById('networkModal').style.display = 'flex';
-        }
-
-        // Close modal
         function closeModal() {
-            document.getElementById('networkModal').style.display = 'none';
+            const modal = document.querySelector('.modal');
+            modal.style.display = 'none'; // Hide modal
         }
 
-        // Refresh page
-        function refreshPage() {
-            location.reload();
-        }
-
-        // Close toast notification
-        function closeToast() {
-            document.getElementById('networkToast').style.display = 'none';
-        }
-
-        // Monitor network status
-        window.addEventListener('offline', () => {
-            showModal();
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const filteredProducts = productsData.filter(product => product.name.toLowerCase().includes(query));
+            displayProducts(filteredProducts);
         });
 
-        window.addEventListener('online', () => {
-            closeModal();
-        });
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.querySelector('.toast');
+            toast.innerHTML = message;
+            toast.style.display = 'block';
 
-        // Simulate network speed check (optional)
-        setInterval(() => {
-            if (Math.random() < 0.2) { // Simulate a 20% chance of showing slow network
-                document.getElementById('networkToast').style.display = 'block';
-                setTimeout(() => {
-                    closeToast();
-                }, 5000); // Auto close after 5 seconds
-            }
-        }, 10000); // Check every 10 seconds
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
     </script>
 </head>
 <body>
-    <header class="header">
+    <div class="header">
         <div class="logo">Bargain</div>
-        <div class="right-icons">
-            <i class="fas fa-user-circle"></i>
-            <i class="fas fa-shopping-cart"></i>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search for products...">
         </div>
-    </header>
+    </div>
     <div class="sub-header">
-        <h3>Find the best bargains on the market!</h3>
+        <h3>Your One-Stop Shop for All Things Amazing!</h3>
     </div>
     <div class="main-content">
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for products..." oninput="searchProducts()">
-        </div>
         <div class="product-list"></div>
     </div>
 
-    <!-- Modal for Network Issues -->
-    <div class="modal" id="networkModal">
-        <div class="modal-content">
-            <h2>No Connection</h2>
-            <p>It seems you're offline. Please check your internet connection.</p>
-            <button onclick="refreshPage()">Refresh</button>
-            <button onclick="closeModal()">Close</button>
-        </div>
+    <!-- Modal for product details -->
+    <div class="modal">
+        <div class="modal-content"></div>
     </div>
 
-    <!-- Toast Notification for Slow Network -->
-    <div class="toast" id="networkToast">
-        <p>Network is slow. Please be patient.</p>
-        <button class="close-btn" onclick="closeToast()">Close</button>
-    </div>
+    <!-- Toast notification -->
+    <div class="toast"></div>
 </body>
 </html>
