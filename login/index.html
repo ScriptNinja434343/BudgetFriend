@@ -1,0 +1,185 @@
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 800px;
+            height: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .left {
+            background-image: url('bb.jpg');
+
+            background: linear-gradient(135deg, #e04cebd2, #c850c0);
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            padding: 20px;
+        }
+        .left .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .left h1 {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .right {
+            background-color: white;
+            width: 50%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .right p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .right .login-btn {
+            background-color: #bf0db2;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 93%;
+        }
+        .right .login-btn i {
+            margin-right: 10px;
+        }
+        .right .signup {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+        }
+        .right .signup a {
+            color: #7b2ff7;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+                height: auto;
+            }
+            .left, .right {
+                width: 100%;
+                height: auto;
+            }
+            .left {
+                padding: 40px 20px;
+                height: 300px;
+
+            }
+            .right {
+                padding: 20px;
+            }
+            .left h1 {
+                font-size: 36px;
+                margin-left: -20px;
+            }
+            .right h2 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .left h1 {
+                font-size: 24px;
+            }
+            .right h2 {
+                font-size: 24px;
+            }
+            .right p, .right .signup {
+                font-size: 12px;
+            }
+            .right .login-btn {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="logo">
+                <i class="fas fa-mountain"></i>
+            </div>
+            <h1>Welcome!</h1>
+        </div>
+        <div class="right">
+            <h2>Login or Signup</h2>
+            <p>Welcome Please login or sign-up  your account.</p>
+            <button id="google-login" class="login-btn">
+                <i class="fab fa-google"></i> Login with Google
+            </button>
+          
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+            authDomain: "dropshipping-98eb5.firebaseapp.com",
+            projectId: "dropshipping-98eb5",
+            storageBucket: "dropshipping-98eb5.appspot.com",
+            messagingSenderId: "904925867242",
+            appId: "1:904925867242:web:af0abda866826e92f8fb93",
+            measurementId: "G-BVZR8HY1SR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('google-login').onclick = function () {
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        const credential = GoogleAuthProvider.credentialFromResult(result);
+                        const token = credential.accessToken;
+                        const user = result.user;
+                        console.log('User Info:', user);
+                    })
+                    .catch((error) => {
+                        console.error('Error during login:', error);
+                    });
+            };
+        });
+    </script>
+</body>
+</html>
