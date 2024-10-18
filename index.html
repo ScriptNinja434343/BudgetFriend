@@ -1,184 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affordable E-commerce</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affordable E-commerce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
 
-        body {
-            padding: 0;
-            margin: 0;
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f6c8fe;
-        }
+    body {
+        padding: 0;
+        margin: 0;
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f6c8fe;
+    }
 
-        .full-screen {
-            height: 100vh;
-            display: grid; 
-            grid-template-columns: 1fr 4fr 4fr 1fr; 
-            grid-template-rows: 1fr 9fr;
-            grid-column-gap: 30px;
-            grid-row-gap: 0px; 
-        }
+    .full-screen {
+        height: 100vh;
+        display: grid; 
+        grid-template-columns: 1fr 4fr 4fr 1fr; 
+        grid-template-rows: 1fr 9fr;
+        grid-column-gap: 30px;
+        grid-row-gap: 0px; 
+    }
 
-        .side-screen {
-            grid-area: 1 / 3 / 3 / 5;
-            background-image: url("assest/bg.png");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            z-index: 0;
-        }
-
-        .text-screen {
-            grid-area: 2 / 2 / 3 / 3;
-            padding: 20px;
-        }
-
-        .text-screen h1 {
-            font-size: 75px;
-            line-height: 1;
-            margin-bottom: 10px;
-            color: #9b01b6;
-        }
-
-        .text-screen p {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #44014f;
-
-        }
-
-        .button {
-            margin-top: 30px;
-            background-color: #d908fe;
-            border: 0;
-            border-radius: 10px;
-            font-size: 20px;
-            padding: 5px 10px 5px 15px;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: letter-spacing 0.5s;
-        }
-
-        .button:hover {
-            letter-spacing: 2px;
-            cursor: pointer;
-        }
-
-        .left-nav {
-            grid-area: 1 / 1 / 2 / 3;
-            font-size: 20px;
-            color: #dd5afe;
-            padding: 20px;
-        }
-
-        .right-nav {
-            grid-area: 1 / 3 / 2 / 5;
-            display: flex;
-            justify-content: flex-end;
-            position: relative;
-            z-index: 1;
-            color: white;
-            padding: 20px;
-        }
-
-        .left-nav p, .right-nav p {
-            font-size: 20px;
-            margin: 0 30px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-        }
-
-        .right-nav p:hover {
-            cursor: pointer;
-            opacity: 0.8;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 1024px) {
-            .full-screen {
-                grid-template-columns: 1fr 3fr 3fr; 
-                grid-template-rows: 1fr 8fr; 
-            }
-            .text-screen h1 {
-                font-size: 60px;
-                color: #9b01b6;
-            }
-            .text-screen p {
-                font-size: 16px;
-                color: #44014f;
-
-            }
-            .left-nav p, .right-nav p {
-                font-size: 18px;
-                margin: 0 15px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .full-screen {
-                grid-template-columns: 1fr; 
-                grid-template-rows: auto auto;
-            }
-            .side-screen {
-                grid-area: 1 / 1 / 2 / 2;
-                height: 50vh;
-            }
-            .text-screen {
-                grid-area: 2 / 1 / 3 / 2;
-                text-align: center;
-                padding: 10px;
-            }
-            .text-screen h1 {
-                font-size: 40px;
-            }
-            .text-screen p {
-                font-size: 14px;
-                color: #44014f;
-
-            }
-            .left-nav, .right-nav {
-                display: none; /* Hide navigation on small screens */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .text-screen h1 {
-                color: #9b01b6;
-                font-size: 40px;
-            }
-            .text-screen p {
-                font-size: 12px;
-                font-weight: 500;
-                color: #44014f;
-
-            }
-            .button {
-                font-size: 16px;
-                margin-top: 30px;
-                padding: 5px 10px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="full-screen">
-        <div class="left-nav">
-          <p><span><i class="fas fa-tags"></i></span>Bargain</p>
-        </div>
+    .side-screen {
+        grid-area: 1 / 3 / 3 / 5;
+        background-image: url("assest/bg.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        z-index: 0;
         
-        <div class="side-screen animated fadeInRight"></div>
-        <div class="text-screen animated fadeInUp">
-          <h1>Unbeatable Prices on Quality Products!</h1>
-          <p>Discover amazing deals on your favorite products without breaking the bank. Shop our collection and enjoy low prices every day!</p>
-          <a class="button" href="home/" style="text-decoration: none;">Shop Now! >></a>
-        </div>
-      </div>    
+    }
+
+    .text-screen {
+        grid-area: 2 / 2 / 3 / 3;
+        padding: 20px;
+    }
+
+    .text-screen h1 {
+        font-size: 85px;
+        line-height: 1;
+        margin-bottom: 10px;
+        color: #9b01b6;
+    }
+
+    .text-screen p {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #44014f;
+
+    }
+
+    .button {
+        margin-top: 30px;
+        background-color: #d908fe;
+        border: 0;
+        border-radius: 10px;
+        font-size: 20px;
+        padding: 5px 10px 5px 15px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+        transition: letter-spacing 0.5s;
+    }
+
+    .button:hover {
+        letter-spacing: 2px;
+        cursor: pointer;
+    }
+
+    .left-nav {
+        grid-area: 1 / 1 / 2 / 3;
+        font-size: 20px;
+        color: #dd5afe;
+        padding: 20px;
+    }
+
+    .right-nav {
+        grid-area: 1 / 3 / 2 / 5;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        z-index: 1;
+        color: white;
+        padding: 20px;
+    }
+
+    .left-nav p, .right-nav p {
+        font-size: 20px;
+        margin: 0 30px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+    }
+
+    .right-nav p:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+
+    /* Modal */
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 999; 
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5); 
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 300px;
+        text-align: center;
+    }
+
+    .modal-content h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .modal-content button {
+        padding: 10px 15px;
+        background-color: #d908fe;
+        border: none;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .text-screen h1{
+            font-size: 58px;
+        }
+        
+        .full-screen {
+            grid-template-columns: 1fr; 
+            grid-template-rows: auto auto;
+        }
+        .side-screen {
+            grid-area: 1 / 1 / 2 / 2;
+            height: 50vh;
+            object-fit: cover;
+        }
+        .text-screen {
+            grid-area: 2 / 1 / 3 / 2;
+            text-align: center;
+            padding: 10px;
+        }
+        .left-nav, .right-nav {
+            display: none;
+        }
+    } #loginModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+  
+      #loginModal div {
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        width: 300px;
+        text-align: center;
+      }
+  
+      #loginModal h2 {
+        margin-bottom: 20px;
+        font-size: 1.75rem;
+      }
+  
+      #googleLogin {
+        background-color: #bf0db2;
+        color: white;
+        border: none;
+        padding: 12px 70px;
+        cursor: pointer;
+        font-size: 17px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        margin-left: 10px;
+      }
+  
+      #googleLogin i {
+        font-size: 1.5rem;
+      }
+  
+      #googleLogin:hover {
+        background-color: #db29cf;
+      }
+
+      a{
+        margin-top: 10px;
+        cursor: pointer;
+        color: #db29cf;
+        font-weight: 1000;
+      }
+  </style>
+</head>
+
+<body>
+
+  <!-- Main Layout -->
+  <div class="full-screen">
+    <div class="left-nav">
+      <p><span><i class="fas fa-tags"></i></span>Bargain</p>
+    </div>
+    
+    <div class="side-screen"></div>
+    
+    <div class="text-screen">
+        <h1>Share the Link & Start Earning!</h1>
+        <p>Share our link, and earn every time someone shops. It's easy, quick, and rewarding. Start now!</p>
+        <a class="button" href="#" style="text-decoration: none;">Share Now! >></a>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h2>Login or Sign Up</h2>
+        <button id="googleLogin" class="button">
+          Sign in with  <i class="fab fa-google"></i>
+        </button><br>
+        <a id="closeModalBtn" class="but">Close</a>
+    </div>
+</div>
+
+  <!-- Firebase and App Logic -->
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+    import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+      authDomain: "dropshipping-98eb5.firebaseapp.com",
+      projectId: "dropshipping-98eb5",
+      storageBucket: "dropshipping-98eb5.appspot.com",
+      messagingSenderId: "904925867242",
+      appId: "1:904925867242:web:af0abda866826e92f8fb93",
+      measurementId: "G-BVZR8HY1SR"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore(app);
+    
+    // Set up Google Auth Provider
+    const googleProvider = new GoogleAuthProvider();
+
+    // Close modal function
+    function closeModal() {
+      const modal = document.getElementById('loginModal');
+      modal.style.display = 'none';
+    }
+
+    // Show modal function
+    function showModal() {
+      const modal = document.getElementById('loginModal');
+      modal.style.display = 'flex';
+    }
+
+    // Handle 'Shop Now' Button Click (Show Login Modal)
+    document.querySelector(".button").addEventListener("click", (event) => {
+      event.preventDefault();
+      showModal();
+    });
+
+    // Handle Close Modal Button
+    document.getElementById('closeModalBtn').addEventListener("click", closeModal);
+
+    // Google Login Button Click
+    document.getElementById("googleLogin").addEventListener("click", async () => {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+
+        // Store User Data in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        });
+
+        // Store User Data in Local Storage
+        localStorage.setItem('user', JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        }));
+
+        // Redirect to Home Page After Login
+        window.location.href = "home/";
+      } catch (error) {
+        console.error("Error during sign-in:", error);
+      }
+    });
+
+  </script>
+
 </body>
 </html>
