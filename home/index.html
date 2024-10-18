@@ -30,7 +30,7 @@
             top: 0; /* Stick to the top */
             left: 0; /* Align with the left */
             right: 0; /* Align with the right */
-            background: #eb86ff;; /* Background color for visibility */
+            background: #eb86ff; /* Background color for visibility */
             z-index: 1000; /* Ensure it is above other elements */
             border-radius: 0 0 10px 10px; /* Round the bottom corners */
         }
@@ -87,7 +87,7 @@
             border: 1px solid #ffffff;
             padding: 20px;
             border-radius: 20px;
-            background:  #ffffff;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -101,7 +101,7 @@
         }
         .product-item h2 {
             font-family: "Quicksand", sans-serif;
-                font-size: 12px;
+            font-size: 12px;
             margin: 10px 0 5px;
         }
         .product-item p {
@@ -150,10 +150,9 @@
             }
         }
 
-        h3{
+        h3 {
             color: #590176;
         }
-
 
         .modal {
             display: none;
@@ -253,109 +252,100 @@
                 if (products.hasOwnProperty(key)) {
                     const product = products[key];
                     const productItem = document.createElement('div');
-                    productItem.className = 'product-item';
+                    productItem.classList.add('product-item');
+
                     productItem.innerHTML = `
                         <img src="${product.image}" alt="${product.name}">
                         <h2>${product.name}</h2>
-                        <p class="price">₹${product.price}</p>
-                        <div class="stars">${getStars(product.stars)}</div>
+                        <p>${product.description}</p>
+                        <div class="stars">${'★'.repeat(product.rating)}${'☆'.repeat(5 - product.rating)}</div>
+                        <p class="price">$${product.price}</p>
                     `;
-                    productItem.onclick = () => {
-                        window.location.href = product.link;
-                    };
+
                     productList.appendChild(productItem);
                 }
             }
         }
 
-        // Generate star rating HTML
-        function getStars(rating) {
-            const fullStars = Math.floor(rating);
-            const halfStar = rating % 1 !== 0;
-            let starsHTML = '';
-
-            for (let i = 0; i < fullStars; i++) {
-                starsHTML += '<i class="fas fa-star"></i>';
-            }
-
-            if (halfStar) {
-                starsHTML += '<i class="fas fa-star-half-alt"></i>';
-            }
-
-            for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
-                starsHTML += '<i class="far fa-star"></i>';
-            }
-
-            return starsHTML;
-        }
-
-        // Show shimmer effect while loading
-        function showShimmerEffect() {
-            const productList = document.querySelector('.product-list');
-            productList.innerHTML = ''; // Clear existing products
-            for (let i = 0; i < 12; i++) {
-                const shimmerWrapper = document.createElement('div');
-                shimmerWrapper.className = 'shimmer-wrapper';
-                shimmerWrapper.innerHTML = `
-                    <div class="shimmer" style="width: 100%; height: 150px;"></div>
-                    <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
-                    <div class="shimmer" style="width: 60%; height: 20px;"></div>
-                `;
-                productList.appendChild(shimmerWrapper);
-            }
-        }
-
-        // Filter products based on search input
-        function filterProducts() {
-            const searchTerm = document.querySelector('.search-container input').value.toLowerCase();
-            const filteredProducts = bfsSearch(productsData, searchTerm);
+        // Implement search functionality
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredProducts = productsData.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.description.toLowerCase().includes(searchTerm)
+            );
             displayProducts(filteredProducts);
         }
 
-        // BFS search implementation
-        function bfsSearch(products, searchTerm) {
-            if (!products) return [];
-            let result = [];
-            let queue = Object.values(products);
+        // Show modal for network issues
+        function showModal() {
+            document.getElementById('networkModal').style.display = 'flex';
+        }
 
-            while (queue.length) {
-                let current = queue.shift();
-                if (current.name.toLowerCase().includes(searchTerm)) {
-                    result.push(current);
-                }
+        // Close modal
+        function closeModal() {
+            document.getElementById('networkModal').style.display = 'none';
+        }
+
+        // Refresh page
+        function refreshPage() {
+            location.reload();
+        }
+
+        // Close toast notification
+        function closeToast() {
+            document.getElementById('networkToast').style.display = 'none';
+        }
+
+        // Monitor network status
+        window.addEventListener('offline', () => {
+            showModal();
+        });
+
+        window.addEventListener('online', () => {
+            closeModal();
+        });
+
+        // Simulate network speed check (optional)
+        setInterval(() => {
+            if (Math.random() < 0.2) { // Simulate a 20% chance of showing slow network
+                document.getElementById('networkToast').style.display = 'block';
+                setTimeout(() => {
+                    closeToast();
+                }, 5000); // Auto close after 5 seconds
             }
-            return result;
-        }
-
-        window.onload = function() {
-            showShimmerEffect();
-            document.querySelector('.search-container input').addEventListener('input', filterProducts);
-        }
-
+        }, 10000); // Check every 10 seconds
     </script>
 </head>
 <body>
-    <div class="header">
+    <header class="header">
         <div class="logo">Bargain</div>
-        <div class="search-container">
-            <input type="text" placeholder="Search products...">
+        <div class="right-icons">
+            <i class="fas fa-user-circle"></i>
+            <i class="fas fa-shopping-cart"></i>
         </div>
-    </div><br>
-    <div class="sub-header">Find the best deals on budget-friendly products!</div>
-   
+    </header>
+    <div class="sub-header">
+        <h3>Find the best bargains on the market!</h3>
+    </div>
     <div class="main-content">
-        <h3>Our Products</h3>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for products..." oninput="searchProducts()">
+        </div>
         <div class="product-list"></div>
     </div>
 
+    <!-- Modal for Network Issues -->
     <div class="modal" id="networkModal">
         <div class="modal-content">
-            <p>Network disconnected. Please check your connection.</p>
-            <button class="close-btn" onclick="closeModal()">Close</button>
-            <button class="close-btn" onclick="refreshPage()">Refresh</button>
+            <h2>No Connection</h2>
+            <p>It seems you're offline. Please check your internet connection.</p>
+            <button onclick="refreshPage()">Refresh</button>
+            <button onclick="closeModal()">Close</button>
         </div>
     </div>
-    
+
+    <!-- Toast Notification for Slow Network -->
     <div class="toast" id="networkToast">
         <p>Network is slow. Please be patient.</p>
         <button class="close-btn" onclick="closeToast()">Close</button>
