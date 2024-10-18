@@ -21,34 +21,45 @@
         // Import Firebase libraries
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js";
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const database = getDatabase(app); // Initialize Realtime Database
 
+        // Function to check if user UID already exists
+        const checkUserExists = async (uid) => {
+            const userRef = ref(database, 'users/' + uid);
+            const snapshot = await get(userRef);
+            return snapshot.exists(); // Returns true if the UID exists
+        };
+
         // Google Login
         document.getElementById('google-login').addEventListener('click', () => {
             const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).then((result) => {
+            signInWithPopup(auth, provider).then(async (result) => {
                 const user = result.user;
                 const uid = user.uid; // Get the UID
 
-                // Store UID in Realtime Database
-                set(ref(database, 'users/' + uid), {
-                    uid: uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                }).then(() => {
+                // Check if user already exists in the database
+                const userExists = await checkUserExists(uid);
+                if (!userExists) {
+                    // Store UID in Realtime Database if it does not exist
+                    await set(ref(database, 'users/' + uid), {
+                        uid: uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                    });
                     console.log('User UID saved to database');
-                    window.location.href = '../home/index'; // Redirect to main page
-                }).catch((error) => {
-                    console.error('Error saving UID to database:', error);
-                });
+                } else {
+                    console.log('User UID already exists in the database');
+                }
 
+                // Redirect to main page
+                window.location.href = '../home/index'; 
             }).catch((error) => {
-                console.error(error);
+                console.error('Error during login:', error);
             });
         });
     </script>
