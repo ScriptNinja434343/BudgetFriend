@@ -30,7 +30,7 @@
             top: 0; /* Stick to the top */
             left: 0; /* Align with the left */
             right: 0; /* Align with the right */
-            background: #eb86ff; /* Background color for visibility */
+            background: #eb86ff;; /* Background color for visibility */
             z-index: 1000; /* Ensure it is above other elements */
             border-radius: 0 0 10px 10px; /* Round the bottom corners */
         }
@@ -40,9 +40,14 @@
             font-weight: bold;
             color: white;
             letter-spacing: 5px;
+            font-weight: 100;
         }
-        .header .search-container {
-            margin-left: auto; /* Align search to the right */
+        .header .right-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .header .right-icons i {
+            font-size: 18px;
         }
         .sub-header {
             text-align: center;
@@ -58,7 +63,10 @@
             font-family: 'Playfair Display', serif;
             font-size: 22px;
             margin: 0;
-            color: #590176;
+        }
+        .search-container {
+            text-align: center;
+            margin: 5px 0;
         }
         .search-container input {
             padding: 10px;
@@ -93,7 +101,7 @@
         }
         .product-item h2 {
             font-family: "Quicksand", sans-serif;
-            font-size: 12px;
+                font-size: 12px;
             margin: 10px 0 5px;
         }
         .product-item p {
@@ -141,6 +149,11 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        h3{
+            color: #590176;
+        }
+
 
         .modal {
             display: none;
@@ -214,7 +227,7 @@
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 // User is not logged in, redirect to login page
-                window.location.href = '../login/'; // Change to your login page URL
+                window.location.href = '../login'; // Change to your login page URL
             } else {
                 // User is logged in, fetch products
                 fetchProducts();
@@ -242,75 +255,110 @@
                     const productItem = document.createElement('div');
                     productItem.className = 'product-item';
                     productItem.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}" />
+                        <img src="${product.image}" alt="${product.name}">
                         <h2>${product.name}</h2>
                         <p class="price">₹${product.price}</p>
-                        <div class="stars">${'⭐'.repeat(product.rating)}</div>
+                        <div class="stars">${getStars(product.stars)}</div>
                     `;
-                    productItem.onclick = () => showProductDetails(product);
+                    productItem.onclick = () => {
+                        window.location.href = product.link;
+                    };
                     productList.appendChild(productItem);
                 }
             }
         }
 
-        // Show product details in a modal
-        function showProductDetails(product) {
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.modal-content');
-            modalContent.innerHTML = `
-                <span class="close-btn" onclick="closeModal()">Close</span>
-                <h2>${product.name}</h2>
-                <img src="${product.image}" alt="${product.name}" style="width: 100%;" />
-                <p class="price">₹${product.price}</p>
-                <p>${product.description}</p>
-            `;
-            modal.style.display = 'flex'; // Show modal
+        // Generate star rating HTML
+        function getStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 !== 0;
+            let starsHTML = '';
+
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+
+            if (halfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+
+            for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+
+            return starsHTML;
         }
 
-        function closeModal() {
-            const modal = document.querySelector('.modal');
-            modal.style.display = 'none'; // Hide modal
+        // Show shimmer effect while loading
+        function showShimmerEffect() {
+            const productList = document.querySelector('.product-list');
+            productList.innerHTML = ''; // Clear existing products
+            for (let i = 0; i < 12; i++) {
+                const shimmerWrapper = document.createElement('div');
+                shimmerWrapper.className = 'shimmer-wrapper';
+                shimmerWrapper.innerHTML = `
+                    <div class="shimmer" style="width: 100%; height: 150px;"></div>
+                    <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
+                    <div class="shimmer" style="width: 60%; height: 20px;"></div>
+                `;
+                productList.appendChild(shimmerWrapper);
+            }
         }
 
-        // Search functionality
-        document.getElementById('search-input').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const filteredProducts = productsData.filter(product => product.name.toLowerCase().includes(query));
+        // Filter products based on search input
+        function filterProducts() {
+            const searchTerm = document.querySelector('.search-container input').value.toLowerCase();
+            const filteredProducts = bfsSearch(productsData, searchTerm);
             displayProducts(filteredProducts);
-        });
-
-        // Show toast notification
-        function showToast(message) {
-            const toast = document.querySelector('.toast');
-            toast.innerHTML = message;
-            toast.style.display = 'block';
-
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
         }
+
+        // BFS search implementation
+        function bfsSearch(products, searchTerm) {
+            if (!products) return [];
+            let result = [];
+            let queue = Object.values(products);
+
+            while (queue.length) {
+                let current = queue.shift();
+                if (current.name.toLowerCase().includes(searchTerm)) {
+                    result.push(current);
+                }
+            }
+            return result;
+        }
+
+        window.onload = function() {
+            showShimmerEffect();
+            document.querySelector('.search-container input').addEventListener('input', filterProducts);
+        }
+
     </script>
 </head>
 <body>
     <div class="header">
         <div class="logo">Bargain</div>
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search for products...">
+            <input type="text" placeholder="Search products...">
         </div>
-    </div>
-    <div class="sub-header">
-        <h3>Your One-Stop Shop for All Things Amazing!</h3>
-    </div>
+    </div><br>
+    <div class="sub-header">Find the best deals on budget-friendly products!</div>
+   
     <div class="main-content">
+        <h3>Our Products</h3>
         <div class="product-list"></div>
     </div>
 
-    <!-- Modal for product details -->
-    <div class="modal">
-        <div class="modal-content"></div>
+    <div class="modal" id="networkModal">
+        <div class="modal-content">
+            <p>Network disconnected. Please check your connection.</p>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+            <button class="close-btn" onclick="refreshPage()">Refresh</button>
+        </div>
     </div>
-
-    <!-- Toast notification -->
-    <div class="toast"></div>
+    
+    <div class="toast" id="networkToast">
+        <p>Network is slow. Please be patient.</p>
+        <button class="close-btn" onclick="closeToast()">Close</button>
+    </div>
 </body>
 </html>
