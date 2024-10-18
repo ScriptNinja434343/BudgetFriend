@@ -71,26 +71,14 @@
             margin: 0;
             font-family: 'Open Sans', sans-serif;
             background-color: #f6c8fe;
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
-        .full-screen {
-            height: 100vh;
-            display: grid; 
-            grid-template-columns: 1fr 4fr 4fr 1fr; 
-            grid-template-rows: 1fr 9fr;
-            grid-column-gap: 30px;
-            grid-row-gap: 0px; 
-        }
-
-        .side-screen {
-            grid-area: 1 / 3 / 3 / 5;
-            background-image: url("bb.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            z-index: 0;
-        }
+        
+       
 
         .text-screen {
             grid-area: 2 / 2 / 3 / 3;
@@ -136,15 +124,6 @@
             padding: 20px;
         }
 
-        .right-nav {
-            grid-area: 1 / 3 / 2 / 5;
-            display: flex;
-            justify-content: flex-end;
-            position: relative;
-            z-index: 1;
-            color: white;
-            padding: 20px;
-        }
 
         .left-nav p, .right-nav p {
             font-size: 20px;
@@ -211,6 +190,9 @@
             .text-screen h1 {
                 color: #9b01b6;
                 font-size: 40px;
+                font-weight: 1000;
+                margin-left: 60px;
+
             }
             .text-screen p {
                 font-size: 12px;
@@ -222,18 +204,25 @@
                 font-size: 16px;
                 margin-top: 30px;
                 padding: 5px 10px;
+                margin-left: 60px;
+
             }
+        }
+
+        .b{
+            position: absolute;
+            top: 35%;
+            right: 16%;
         }
     </style>
 </head>
 <body>
     <div class="full-screen">
         <div class="left-nav">
-          <p><span><i class="fas fa-tags"></i></span>Bargain</p>
         </div>
         
-        <div class="side-screen animated fadeInRight"></div>
-        <div class="text-screen animated fadeInUp">
+        <div class="side-screen animated fadeInRight "></div>
+        <div class="text-screen animated fadeInUp b">
             <h1>Share the Link & Start Earning!</h1><br>
             <a class="button" id="google-login" style="text-decoration: none;">Login Now! >></a>
         </div>
