@@ -31,7 +31,7 @@
             const provider = new GoogleAuthProvider();
             signInWithPopup(auth, provider).then((result) => {
                 const user = result.user;
-                window.location.href = 'main.html'; // Redirect to main page
+                window.location.href = '../home/index'; // Redirect to main page
             }).catch((error) => {
                 console.error(error);
             });
@@ -45,7 +45,7 @@
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    window.location.href = '../home/index.html'; // Redirect to main page
+                    window.location.href = '../home/index'; // Redirect to main page
                 })
                 .catch((error) => {
                     console.error(error);
