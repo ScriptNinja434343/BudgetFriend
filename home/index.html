@@ -6,13 +6,13 @@
     <title>Bargain</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Protest+Strike&family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Protest+Strike&family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">    
 
-<style>
+    <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -198,10 +198,12 @@
             border-radius: 5px;
         }
     </style>
+
     <script type="module">
-        // Import the necessary Firebase modules
+        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -217,8 +219,20 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+        const auth = getAuth(app);
 
         let productsData = []; // Store products data
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                window.location.href = '../login/'; // Change to your login page URL
+            } else {
+                // User is logged in, fetch products
+                fetchProducts();
+            }
+        });
 
         // Fetch products from Firebase
         function fetchProducts() {
@@ -315,12 +329,9 @@
 
         window.onload = function() {
             showShimmerEffect();
-            fetchProducts();
             document.querySelector('.search-container input').addEventListener('input', filterProducts);
         }
 
-
-        
     </script>
 </head>
 <body>
@@ -336,7 +347,6 @@
         <h3>Our Products</h3>
         <div class="product-list"></div>
     </div>
-
 
     <div class="modal" id="networkModal">
         <div class="modal-content">
