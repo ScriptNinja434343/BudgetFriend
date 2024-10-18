@@ -28,13 +28,15 @@
 
     .side-screen {
         grid-area: 1 / 3 / 3 / 5;
-        background-image: url("assest/bg.png");
+        background-image: url("assets/bg.png"); /* Path to your image */
         background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        background-size: cover; /* Makes sure the image covers the entire area */
+        background-position: center; /* Centers the image */
+        height: 100vh; /* Ensure the height is set */
         position: relative;
-        z-index: 0;        
+        z-index: 0;
     }
+    
 
     .text-screen {
         grid-area: 2 / 2 / 3 / 3;
@@ -240,41 +242,32 @@
     }
 
     // Handle 'Share Now' Button Click (Show Login Modal)
-    document.querySelector(".button").addEventListener("click", (event) => {
-      event.preventDefault();
+    document.querySelector('.button').addEventListener('click', (e) => {
+      e.preventDefault();
       showModal();
     });
 
-    // Handle Close Modal Button
-    document.getElementById('closeModalBtn').addEventListener("click", closeModal);
-
-    // Google Login Button Click
-    document.getElementById("googleLogin").addEventListener("click", async () => {
+    // Handle Google Login
+    document.getElementById('googleLogin').addEventListener('click', async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
 
-        // Store User Data in Firestore
+        // Store user information in Firestore
         await setDoc(doc(db, "users", user.uid), {
-          name: user.displayName,
-          email: user.email,
-          uid: user.uid
+          uid: user.uid,
+          email: user.email
         });
 
-        // Store User Data in Local Storage
-        localStorage.setItem('user', JSON.stringify({
-          name: user.displayName,
-          email: user.email,
-          uid: user.uid
-        }));
-
-        // Redirect to Home Page After Login
-        window.location.href = "home/";
+        console.log("User signed in: ", user.email);
+        closeModal();
       } catch (error) {
-        console.error("Error during sign-in:", error);
+        console.error("Error during Google login:", error);
       }
     });
-  </script>
 
+    // Close Modal Button
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+  </script>
 </body>
 </html>
