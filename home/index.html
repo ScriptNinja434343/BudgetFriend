@@ -68,25 +68,46 @@
             margin: 0;
         }
         .search-container {
-
-            text-align: center;
-            margin: 5px 0;
+            display: flex; /* Use flexbox to align the input and its container */
+            justify-content: center; /* Center the input horizontally */
+            margin: 0 20px; /* Add margin to the left and right of the container */
         }
+        
         .search-container input {
             padding: 10px;
-            width: 200px;
+            width: 200px; /* Default width */
             border: 1px solid #ffffff9a;
             border-radius: 10px;
             background-color: #f1bffa63;
-            margin-right: 50px;
+            margin: 0 20px; /* Equal gap on the left and right */
+            color: white;
+            font-size: 15px;
+            font-weight: 1000;
+            transition: width 0.3s ease; /* Smooth transition for width changes */
         }
-
-        @media screen and (max-width: 768px) {
-            .search-container input{
-                width: 260px;
-                margin-right: 44px;
+        
+        /* Adjust the input width for larger screens */
+        @media screen and (min-width: 768px) {
+            .search-container input {
+                width: 240px; /* Wider width for larger screens */
             }
         }
+        
+        /* Adjust the input width for medium-sized screens */
+        @media screen and (max-width: 768px) and (min-width: 480px) {
+            .search-container input {
+                width: 180px; /* Decrease width for medium screens */
+            }
+        }
+        
+        /* Adjust the input width for smaller screens */
+        @media screen and (max-width: 480px) {
+            .search-container input {
+                width: 150px; /* Further decrease width for small screens */
+                font-size: 14px; /* Optionally decrease font size */
+            }
+        }
+        
         .product-list {
             background-color: #a600c700;
             display: grid;
@@ -212,13 +233,13 @@
         .button {
             background-color: rgba(255, 255, 255, 0.568);
             position: absolute;
-            top: 14px;
+            top: 10;
             right: 8px;
             background-color: none;
             border: 0;
             border-radius: 10px;
             font-size: 20px;
-            padding: 8px 10px;
+            padding: 10px 10px;
             color: #9b01b6;
             font-weight: bold;
             letter-spacing: 1px;
@@ -390,7 +411,7 @@
     <div class="sub-header">Share budget-friendly product deals and earn!</div>
    
     <div class="main-content">
-        <h3>Our Products</h3>
+        <h3>Our Products</h3>   
         <div class="product-list"></div>
     </div>
 
