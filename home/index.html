@@ -12,7 +12,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Protest+Strike&family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
 
@@ -56,7 +58,9 @@
             text-align: center;
             padding: 10px 0;
             font-size: 14px;
-            color: #888;
+            font-weight: 600;
+            color:  #7c0176;
+
         }
         .main-content {
             text-align: center;
@@ -331,154 +335,275 @@ color: rgb(173, 1, 167);
     }
 }
 
+.share-btn{
+    background-color: #9b01b6;
+  margin-top: 5px;
+    background-color: none;
+    border: 0;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 9px 10px;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+   
+}
+
+.share-btn:hover{
+    background-color: #710084;
+}
+
+
+#welcome-message{
+    color:  #9b01b6;
+
+    font-size: 20px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.user-name{
+    font-family: "DynaPuff", system-ui;
+    color:  #9b01b6;
+    font-weight: 1000;
+    
+}
+
+
     </style>
 
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
-            authDomain: "dropshipping-98eb5.firebaseapp.com",
-            projectId: "dropshipping-98eb5",
-            storageBucket: "dropshipping-98eb5.appspot.com",
-            messagingSenderId: "904925867242",
-            appId: "1:904925867242:web:af0abda866826e92f8fb93",
-            measurementId: "G-BVZR8HY1SR"
-        };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const auth = getAuth(app);
 
-        let productsData = []; // Store products data
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+        authDomain: "dropshipping-98eb5.firebaseapp.com",
+        projectId: "dropshipping-98eb5",
+        storageBucket: "dropshipping-98eb5.appspot.com",
+        messagingSenderId: "904925867242",
+        appId: "1:904925867242:web:af0abda866826e92f8fb93",
+        measurementId: "G-BVZR8HY1SR"
+    };
 
-        // Check authentication state
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // User is not logged in, redirect to login page
-                window.location.href = '../login'; // Change to your login page URL
-            } else {
-                // User is logged in, fetch products
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    let productsData = []; // Store products data
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            // User is not logged in, redirect to login page
+            window.location.href = '../login'; // Change to your login page URL
+        } else {
+            // User is logged in, fetch products
+            try {
                 fetchProducts();
+            } catch (error) {
+                console.error("Error fetching products: ", error);
             }
+        }
+    });
+
+    // Fetch products from Firebase
+    function fetchProducts() {
+        const productsRef = ref(database, 'products');
+        onValue(productsRef, (snapshot) => {
+            const products = snapshot.val();
+            productsData = products || []; // Fallback to an empty array if no products
+            displayProducts(products);
+        });
+    }
+
+    function displayProducts(products) {
+        const productList = document.querySelector('.product-list');
+        productList.innerHTML = ''; // Clear existing products
+    
+        // Check local storage once to avoid redundant calls inside the loop
+        const sharedProducts = Object.keys(products).reduce((acc, key) => {
+            const shareButtonState = localStorage.getItem(`shareButtonState-${key}`);
+            acc[key] = shareButtonState === 'shared'; // true if shared
+            return acc;
+        }, {});
+    
+        for (const key in products) {
+            if (products.hasOwnProperty(key)) {
+                const product = products[key];
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}.jpg">
+                    <h2>${product.name}</h2>
+                    <p class="price">₹${product.price}</p>
+                    <div class="stars">${getStars(product.stars)}</div>
+                    <button class="share-btn">
+                        ${sharedProducts[key] ? 
+                            '<i class="fa-solid fa-check-circle"></i>&nbsp;Shared' : 
+                            '<i class="fa-solid fa-share-nodes"></i>&nbsp;Share'}
+                    </button>
+                `;
+    
+                // If shared, disable the button
+                if (sharedProducts[key]) {
+                    const shareButton = productItem.querySelector('.share-btn');
+                    shareButton.disabled = true; // Keep the button disabled
+                }
+    
+              
+    
+                // Add event listener for WhatsApp share button
+                const shareButton = productItem.querySelector('.share-btn');
+                shareButton.onclick = (event) => {
+                    event.stopPropagation(); // Prevent triggering the product link
+                    shareOnWhatsApp(product);
+    
+                    // Replace the button content with a success symbol
+                    shareButton.innerHTML = '<i class="fa-solid fa-check-circle"></i>&nbsp;Shared';
+                    shareButton.disabled = true; // Optionally disable the button to prevent multiple clicks
+    
+                    // Store the state in local storage to remember it for the logged-in user
+                    localStorage.setItem(`shareButtonState-${key}`, 'shared');
+                };
+    
+                productList.appendChild(productItem);
+            }
+        }
+    }
+    
+
+
+   function shareOnWhatsApp(product) {
+    const starsString = getStarsString(product.stars);
+
+    const message = `
+Check out this product: ${product.name}
+
+🎉 Explore the incredible features of this product at a **low price**! 
+It’s designed with you in mind and will elevate your daily routine. 
+Don't miss out on the chance to enhance your experience! 🛍️
+
+Price: ₹${product.price}
+Link: ${product.link}
+Rating: ${starsString}
+
+🌟 Grab yours today and enjoy all the benefits! 🌈
+    `;
+
+    // Encode the message for WhatsApp URL
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message.trim())}`;
+    window.open(url, '_blank');
+}
+
+
+
+function getStarsString(rating) {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 !== 0;
+    let starsString = '';
+
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsString += '⭐'; // Full star emoji
+    }
+
+    // Add half star if exists
+    if (halfStar) {
+        starsString += '⭐½'; // Half star emoji
+    }
+
+    // Add empty stars
+    for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+        starsString += '☆'; // Empty star emoji
+    }
+
+    return starsString;
+}
+    // Generate star rating HTML
+    function getStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 !== 0;
+        let starsHTML = '';
+
+        for (let i = 0; i < fullStars; i++) {
+            starsHTML += '<i class="fas fa-star"></i>';
+        }
+
+        if (halfStar) {
+            starsHTML += '<i class="fas fa-star-half-alt"></i>';
+        }
+
+        for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+            starsHTML += '<i class="far fa-star"></i>';
+        }
+
+        return starsHTML;
+    }
+
+    // Show shimmer effect while loading
+    function showShimmerEffect() {
+        const productList = document.querySelector('.product-list');
+        productList.innerHTML = ''; // Clear existing products
+        for (let i = 0; i < 12; i++) {
+            const shimmerWrapper = document.createElement('div');
+            shimmerWrapper.className = 'shimmer-wrapper';
+            shimmerWrapper.innerHTML = `
+                <div class="shimmer" style="width: 100%; height: 150px;"></div>
+                <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
+                <div class="shimmer" style="width: 60%; height: 20px;"></div>
+            `;
+            productList.appendChild(shimmerWrapper);
+        }
+    }
+
+    // Filter products based on search input
+    function filterProducts() {
+        const searchTerm = document.querySelector('.search-container input').value.toLowerCase();
+        const filteredProducts = bfsSearch(productsData, searchTerm);
+        displayProducts(filteredProducts);
+    }
+
+    // BFS search implementation
+    function bfsSearch(products, searchTerm) {
+        if (!products) return [];
+        let result = [];
+        let queue = Object.values(products);
+
+        while (queue.length) {
+            let current = queue.shift();
+            if (current.name.toLowerCase().includes(searchTerm)) {
+                result.push(current);
+            }
+        }
+        return result;
+    }
+
+   
+    window.onload = function() {
+        showShimmerEffect();
+        document.querySelector('.search-container input').addEventListener('input', filterProducts);
+    }
+
+   
+    
+        document.getElementById('logout-button').addEventListener('click', () => {
+            // Clear user data from Local Storage
+            localStorage.removeItem('user');
+
+            // Redirect to the login page
+            window.location.href = '../'; // Adjust to your login page URL
         });
 
-        // Fetch products from Firebase
-        function fetchProducts() {
-            const productsRef = ref(database, 'products');
-            onValue(productsRef, (snapshot) => {
-                const products = snapshot.val();
-                productsData = products; // Store data for filtering
-                displayProducts(products);
-            });
-        }
-
-        // Display products on the page
-        function displayProducts(products) {
-            const productList = document.querySelector('.product-list');
-            productList.innerHTML = ''; // Clear existing products
-
-            for (const key in products) {
-                if (products.hasOwnProperty(key)) {
-                    const product = products[key];
-                    const productItem = document.createElement('div');
-                    productItem.className = 'product-item';
-                    productItem.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h2>${product.name}</h2>
-                        <p class="price">₹${product.price}</p>
-                        <div class="stars">${getStars(product.stars)}</div>
-                    `;
-                    productItem.onclick = () => {
-                        window.location.href = product.link;
-                    };
-                    productList.appendChild(productItem);
-                }
-            }
-        }
-
-        // Generate star rating HTML
-        function getStars(rating) {
-            const fullStars = Math.floor(rating);
-            const halfStar = rating % 1 !== 0;
-            let starsHTML = '';
-
-            for (let i = 0; i < fullStars; i++) {
-                starsHTML += '<i class="fas fa-star"></i>';
-            }
-
-            if (halfStar) {
-                starsHTML += '<i class="fas fa-star-half-alt"></i>';
-            }
-
-            for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
-                starsHTML += '<i class="far fa-star"></i>';
-            }
-
-            return starsHTML;
-        }
-
-        // Show shimmer effect while loading
-        function showShimmerEffect() {
-            const productList = document.querySelector('.product-list');
-            productList.innerHTML = ''; // Clear existing products
-            for (let i = 0; i < 12; i++) {
-                const shimmerWrapper = document.createElement('div');
-                shimmerWrapper.className = 'shimmer-wrapper';
-                shimmerWrapper.innerHTML = `
-                    <div class="shimmer" style="width: 100%; height: 150px;"></div>
-                    <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
-                    <div class="shimmer" style="width: 60%; height: 20px;"></div>
-                `;
-                productList.appendChild(shimmerWrapper);
-            }
-        }
-
-        // Filter products based on search input
-        function filterProducts() {
-            const searchTerm = document.querySelector('.search-container input').value.toLowerCase();
-            const filteredProducts = bfsSearch(productsData, searchTerm);
-            displayProducts(filteredProducts);
-        }
-
-        // BFS search implementation
-        function bfsSearch(products, searchTerm) {
-            if (!products) return [];
-            let result = [];
-            let queue = Object.values(products);
-
-            while (queue.length) {
-                let current = queue.shift();
-                if (current.name.toLowerCase().includes(searchTerm)) {
-                    result.push(current);
-                }
-            }
-            return result;
-        }
-
-        window.onload = function() {
-            showShimmerEffect();
-            document.querySelector('.search-container input').addEventListener('input', filterProducts);
-        }
-
-       
-        
-            document.getElementById('logout-button').addEventListener('click', () => {
-                // Clear user data from Local Storage
-                localStorage.removeItem('user');
-    
-                // Redirect to the login page
-                window.location.href = '../login'; // Adjust to your login page URL
-            });
-    
 
 
-            // Get modal element
+        // Get modal element
 const modal = document.getElementById("welcomeModal");
 
 // Get open modal button
@@ -489,23 +614,40 @@ const closeModalButton = document.getElementById("closeModal");
 
 // Listen for open click
 openModalButton.addEventListener("click", function(e) {
-    e.preventDefault(); // Prevent default anchor behavior
-    modal.style.display = "block"; // Show the modal
+e.preventDefault(); // Prevent default anchor behavior
+modal.style.display = "block"; // Show the modal
 });
 
 // Listen for close click
 closeModalButton.addEventListener("click", function() {
-    modal.style.display = "none"; // Hide the modal
+modal.style.display = "none"; // Hide the modal
 });
 
 // Listen for outside click to close modal
 window.addEventListener("click", function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none"; // Hide the modal if clicked outside
-    }
+if (event.target === modal) {
+    modal.style.display = "none"; // Hide the modal if clicked outside
+}
 });
+    function displayUserName() {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            const welcomeMessage = document.getElementById('welcome-message');
+            const userName = welcomeMessage.querySelector('.user-name');
+            userName.innerHTML = user.displayName; // Display the user's name
+        } else {
+            console.log('No user is logged in.');
+            // You can also redirect to the login page if no user is found
+            window.location.href = '../login/';
+        }
+    }
+    
+    // Call the function when the page loads
+    window.onload = displayUserName;
+    
+</script>
 
-    </script>
 </head>
 <body>
   
@@ -518,7 +660,13 @@ window.addEventListener("click", function(event) {
 
         </div>
     </div><br>
+    <div id="welcome-message">
+        <span class="welcome-text">Welcome, </span>
+        <span class="user-name"></span>
+    </div>
     <div class="sub-header">Share budget-friendly product deals and earn!</div>
+    
+
    
     <div class="main-content">
         <h3>Our Products</h3>   
