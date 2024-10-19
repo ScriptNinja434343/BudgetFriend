@@ -96,14 +96,15 @@
         /* Adjust the input width for medium-sized screens */
         @media screen and (max-width: 768px) and (min-width: 480px) {
             .search-container input {
-                width: 180px; /* Decrease width for medium screens */
+                width: 200px; /* Decrease width for medium screens */
             }
         }
         
         /* Adjust the input width for smaller screens */
         @media screen and (max-width: 480px) {
             .search-container input {
-                width: 150px; /* Further decrease width for small screens */
+                margin-right:100px ;
+                width: 180px; /* Further decrease width for small screens */
                 font-size: 14px; /* Optionally decrease font size */
             }
         }
@@ -250,6 +251,38 @@
         .button:hover {
             letter-spacing: 2px;
         }
+
+        .float-button {
+            position: fixed; /* Fixes the button in the viewport */
+            bottom: 20px; /* Distance from the bottom of the viewport */
+            right: 20px; /* Distance from the right side of the viewport */
+            background-color: #9b01b6; /* Background color of the button */
+            color: white; /* Text color */
+            border: none; /* No border */
+            border-radius: 50%; /* Makes the button circular */
+            width: 60px; /* Width of the button */
+            height: 60px; /* Height of the button */
+            display: flex; /* Flexbox to center the icon */
+            justify-content: center; /* Center the icon horizontally */
+            align-items: center; /* Center the icon vertically */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            font-size: 24px; /* Size of the icon */
+            text-decoration: none; /* No underline */
+            transition: background-color 0.3s ease; /* Smooth background color transition */
+        }
+        
+        .float-button:hover {
+            background-color: #780186; /* Darker shade on hover */
+        }
+        
+        @media (max-width: 480px) {
+            .float-button {
+                width: 50px; /* Adjust button size for smaller screens */
+                height: 50px; /* Adjust button size for smaller screens */
+                font-size: 20px; /* Adjust icon size for smaller screens */
+            }
+        }
+        
     </style>
 
     <script type="module">
@@ -414,6 +447,12 @@
         <h3>Our Products</h3>   
         <div class="product-list"></div>
     </div>
+
+    <!-- Floating Button -->
+<a href="#" class="float-button">
+    <i class="fas fa-plus"></i> <!-- Icon for the button -->
+</a>
+
 
     <div class="modal" id="networkModal">
         <div class="modal-content">
