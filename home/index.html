@@ -11,8 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Protest+Strike&family=Qwitcher+Grypen:wght@400;700&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
+
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -36,11 +39,11 @@
         }
         .header .logo {
             font-family: "Bebas Neue", serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            color: white;
-            letter-spacing: 5px;
+            color:#ffffff ;
             font-weight: 100;
+            margin-left: -8px;
         }
         .header .right-icons {
             display: flex;
@@ -65,6 +68,7 @@
             margin: 0;
         }
         .search-container {
+
             text-align: center;
             margin: 5px 0;
         }
@@ -74,6 +78,14 @@
             border: 1px solid #ffffff9a;
             border-radius: 10px;
             background-color: #f1bffa63;
+            margin-right: 50px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .search-container input{
+                width: 260px;
+                margin-right: 44px;
+            }
         }
         .product-list {
             background-color: #a600c700;
@@ -196,6 +208,26 @@
             border: none;
             padding: 5px 10px;
             border-radius: 5px;
+        }
+        .button {
+            background-color: rgba(255, 255, 255, 0.568);
+            position: absolute;
+            top: 14px;
+            right: 8px;
+            background-color: none;
+            border: 0;
+            border-radius: 10px;
+            font-size: 20px;
+            padding: 8px 10px;
+            color: #9b01b6;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: letter-spacing 0.5s;
+        }
+
+        .button:hover {
+            letter-spacing: 2px;
         }
     </style>
 
@@ -332,16 +364,30 @@
             document.querySelector('.search-container input').addEventListener('input', filterProducts);
         }
 
+       
+        
+            document.getElementById('logout-button').addEventListener('click', () => {
+                // Clear user data from Local Storage
+                localStorage.removeItem('user');
+    
+                // Redirect to the login page
+                window.location.href = '../login'; // Adjust to your login page URL
+            });
+    
     </script>
 </head>
 <body>
+  
+
     <div class="header">
-        <div class="logo">Bargain</div>
+        <div class="logo"><i class="fa-solid fa-tag"></i></div>
         <div class="search-container">
             <input type="text" placeholder="Search products...">
+        <button class="button" id="logout-button"><i class="fa-solid fa-right-from-bracket"></i></button>
+
         </div>
     </div><br>
-    <div class="sub-header">Find the best deals on budget-friendly products!</div>
+    <div class="sub-header">Share budget-friendly product deals and earn!</div>
    
     <div class="main-content">
         <h3>Our Products</h3>

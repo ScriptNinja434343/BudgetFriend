@@ -19,7 +19,7 @@
             text-align: center;
             overflow: hidden;
         }
-        
+
         .full-screen {
             position: fixed;
             top: 50%;
@@ -31,7 +31,7 @@
             flex-direction: column;
             width: 100%; 
         }
-        
+
         .text-screen h1 {
             font-family: 'My', sans-serif;
             font-size: 75px;
@@ -39,13 +39,13 @@
             margin-bottom: 10px;
             color: #9b01b6;
         }
-        
+
         .text-screen p {
             font-size: 18px;
             line-height: 1.7;
             color: #44014f;
         }
-        
+
         .button {
             margin-top: 30px;
             background-color: #9b01b6;
@@ -58,12 +58,12 @@
             letter-spacing: 1px;
             transition: letter-spacing 0.5s;
         }
-        
+
         .button:hover {
             letter-spacing: 2px;
             cursor: pointer;
         }
-        
+
         /* Loader styles */
         .spinner {
             border: 12px solid #f3f3f3; /* Light grey */
@@ -76,12 +76,12 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         /* Hidden by default */
         #loader {
             display: none;
@@ -90,7 +90,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-        
+
         @media (max-width: 768px) {
             .text-screen h1 {
                 font-size: 50px;
@@ -99,7 +99,7 @@
                 font-size: 14px;
             }
         }
-        
+
         @media (max-width: 480px) {
             .text-screen h1 {
                 font-size: 40px;
@@ -114,14 +114,17 @@
                 padding: 5px 10px;
             }
         }
-        
+
         @font-face {
             font-family: 'My'; /* The name you want to use for the font */
             src: url('tx.otf') format('opentype');
             font-weight: normal; /* Specify font weight (e.g., 'bold' if necessary) */
             font-style: normal;  /* Specify font style (e.g., 'italic' if necessary) */
         }
-        
+
+        p{
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -134,7 +137,8 @@
     <!-- Main content (hidden if user is logged in) -->
     <div class="full-screen" id="content">
         <div class="text-screen">
-            <h1 style="letter-spacing: 2px; font-weight:600;"><i class="fa-solid fa-share-nodes"></i> Share the Link & Start Earning!</h1><br>
+            <h1 style="letter-spacing: 2px; font-weight:600;"><i class="fa-solid fa-share-nodes"></i> Share the Link & Start Earning!</h1>
+            <p id="login-message" style="display:none;">Please login or signup to access your account.</p>
             <a class="button" id="google-login" style="text-decoration: none;">Login Now! >></a>
         </div>
     </div>
@@ -176,6 +180,7 @@
             // User not logged in, show login button and main content
             document.getElementById('loader').style.display = 'none';
             document.getElementById('content').style.display = 'block';
+            document.getElementById('login-message').style.display = 'block'; // Show login message
         }
 
         // Function to check if user UID already exists in Firebase
