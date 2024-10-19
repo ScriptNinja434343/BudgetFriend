@@ -6,8 +6,141 @@
     <title>Affordable E-commerce</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f6c8fe;
+            height: 100vh;
+            width: 100vw;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .full-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%; 
+        }
+        
+        .text-screen h1 {
+            font-family: 'My', sans-serif;
+            font-size: 75px;
+            line-height: 1;
+            margin-bottom: 10px;
+            color: #9b01b6;
+        }
+        
+        .text-screen p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #44014f;
+        }
+        
+        .button {
+            margin-top: 30px;
+            background-color: #9b01b6;
+            border: 0;
+            border-radius: 10px;
+            font-size: 20px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: letter-spacing 0.5s;
+        }
+        
+        .button:hover {
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+        
+        /* Loader styles */
+        .spinner {
+            border: 12px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #9b01b6; /* Purple */
+            border-radius: 50%;
+            width:60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hidden by default */
+        #loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @media (max-width: 768px) {
+            .text-screen h1 {
+                font-size: 50px;
+            }
+            .text-screen p {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .text-screen h1 {
+                font-size: 40px;
+                font-weight: 1000;
+            }
+            .text-screen p {
+                font-size: 12px;
+                font-weight: 500;
+            }
+            .button {
+                font-size: 16px;
+                padding: 5px 10px;
+            }
+        }
+        
+        @font-face {
+            font-family: 'My'; /* The name you want to use for the font */
+            src: url('tx.otf') format('opentype');
+            font-weight: normal; /* Specify font weight (e.g., 'bold' if necessary) */
+            font-style: normal;  /* Specify font style (e.g., 'italic' if necessary) */
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Main content (hidden if user is logged in) -->
+    <div class="full-screen" id="content">
+        <div class="text-screen">
+            <h1 style="letter-spacing: 2px; font-weight:600;"><i class="fa-solid fa-share-nodes"></i> Share the Link & Start Earning!</h1><br>
+            <a class="button" id="google-login" style="text-decoration: none;">Login Now! >></a>
+        </div>
+    </div>
+
     <script type="module">
-        // Your web app's Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
             projectId: "dropshipping-98eb5",
             apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
@@ -28,7 +161,24 @@
         const auth = getAuth(app);
         const database = getDatabase(app); // Initialize Realtime Database
 
-        // Function to check if user UID already exists
+        // Check if user details are stored in Local Storage
+        const savedUser = localStorage.getItem('user');
+
+        if (savedUser) {
+            // User exists, show loader and redirect after 5 seconds
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('content').style.display = 'none'; // Hide main content
+
+            setTimeout(() => {
+                window.location.href = '../home/';
+            }, 5000); // 5 second delay
+        } else {
+            // User not logged in, show login button and main content
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }
+
+        // Function to check if user UID already exists in Firebase
         const checkUserExists = async (uid) => {
             const userRef = ref(database, 'users/' + uid);
             const snapshot = await get(userRef);
@@ -40,192 +190,32 @@
             const provider = new GoogleAuthProvider();
             signInWithPopup(auth, provider).then(async (result) => {
                 const user = result.user;
-                const uid = user.uid; // Get the UID
+                const uid = user.uid;
 
-                // Check if user already exists in the database
+                // Check if user exists in Firebase
                 const userExists = await checkUserExists(uid);
                 if (!userExists) {
-                    // Store UID in Realtime Database if it does not exist
+                    // If user doesn't exist, save details to Firebase
                     await set(ref(database, 'users/' + uid), {
                         uid: uid,
                         email: user.email,
                         displayName: user.displayName,
                     });
-                    console.log('User UID saved to database');
-                } else {
-                    console.log('User UID already exists in the database');
                 }
 
-                // Redirect to main page
-                window.location.href = '../home/'; 
+                // Save user details to Local Storage
+                localStorage.setItem('user', JSON.stringify({
+                    uid: uid,
+                    displayName: user.displayName,
+                    email: user.email
+                }));
+
+                // Redirect to the home page after login
+                window.location.href = '../home/';
             }).catch((error) => {
                 console.error('Error during login:', error);
             });
         });
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
-
-        body {
-            padding: 0;
-            margin: 0;
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f6c8fe;
-            display: grid;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        
-       
-
-        .text-screen {
-            grid-area: 2 / 2 / 3 / 3;
-            padding: 20px;
-        }
-
-        .text-screen h1 {
-            font-size: 75px;
-            line-height: 1;
-            margin-bottom: 10px;
-            color: #9b01b6;
-        }
-
-        .text-screen p {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #44014f;
-
-        }
-
-        .button {
-            margin-top: 30px;
-            background-color: #d908fe;
-            border: 0;
-            border-radius: 10px;
-            font-size: 20px;
-            padding: 5px 10px 5px 15px;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: letter-spacing 0.5s;
-        }
-
-        .button:hover {
-            letter-spacing: 2px;
-            cursor: pointer;
-        }
-
-        .left-nav {
-            grid-area: 1 / 1 / 2 / 3;
-            font-size: 20px;
-            color: #dd5afe;
-            padding: 20px;
-        }
-
-
-        .left-nav p, .right-nav p {
-            font-size: 20px;
-            margin: 0 30px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-        }
-
-        .right-nav p:hover {
-            cursor: pointer;
-            opacity: 0.8;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 1024px) {
-            .full-screen {
-                grid-template-columns: 1fr 3fr 3fr; 
-                grid-template-rows: 1fr 8fr; 
-            }
-            .text-screen h1 {
-                font-size: 60px;
-                color: #9b01b6;
-            }
-            .text-screen p {
-                font-size: 16px;
-                color: #44014f;
-
-            }
-            .left-nav p, .right-nav p {
-                font-size: 18px;
-                margin: 0 15px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .full-screen {
-                grid-template-columns: 1fr; 
-                grid-template-rows: auto auto;
-            }
-            .side-screen {
-                grid-area: 1 / 1 / 2 / 2;
-                height: 50vh;
-                margin-top: -40px;
-            }
-            .text-screen {
-                grid-area: 2 / 1 / 3 / 2;
-                text-align: center;
-                padding: 10px;
-            }
-            .text-screen h1 {
-                font-size: 50px;
-            }
-            .text-screen p {
-                font-size: 14px;
-                color: #44014f;
-
-            }
-            .left-nav, .right-nav {
-                display: none; /* Hide navigation on small screens */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .text-screen h1 {
-                color: #9b01b6;
-                font-size: 40px;
-                font-weight: 1000;
-                margin-left: 60px;
-
-            }
-            .text-screen p {
-                font-size: 12px;
-                font-weight: 500;
-                color: #44014f;
-
-            }
-            .button {
-                font-size: 16px;
-                margin-top: 30px;
-                padding: 5px 10px;
-                margin-left: 60px;
-
-            }
-        }
-
-        .b{
-            position: absolute;
-            top: 35%;
-            right: 16%;
-        }
-    </style>
-</head>
-<body>
-    <div class="full-screen">
-        <div class="left-nav">
-        </div>
-        
-        <div class="side-screen animated fadeInRight "></div>
-        <div class="text-screen animated fadeInUp b">
-            <h1>Share the Link & Start Earning!</h1><br>
-            <a class="button" id="google-login" style="text-decoration: none;">Login Now! >></a>
-        </div>
-      </div>    
 </body>
 </html>
