@@ -96,15 +96,14 @@
         /* Adjust the input width for medium-sized screens */
         @media screen and (max-width: 768px) and (min-width: 480px) {
             .search-container input {
-                width: 200px; /* Decrease width for medium screens */
+                width: 180px; /* Decrease width for medium screens */
             }
         }
         
         /* Adjust the input width for smaller screens */
         @media screen and (max-width: 480px) {
             .search-container input {
-                margin-right:100px ;
-                width: 180px; /* Further decrease width for small screens */
+                width: 150px; /* Further decrease width for small screens */
                 font-size: 14px; /* Optionally decrease font size */
             }
         }
@@ -240,7 +239,7 @@
             border: 0;
             border-radius: 10px;
             font-size: 20px;
-            padding: 10px 10px;
+            padding: 9px 10px;
             color: #9b01b6;
             font-weight: bold;
             letter-spacing: 1px;
@@ -252,37 +251,86 @@
             letter-spacing: 2px;
         }
 
-        .float-button {
-            position: fixed; /* Fixes the button in the viewport */
-            bottom: 20px; /* Distance from the bottom of the viewport */
-            right: 20px; /* Distance from the right side of the viewport */
-            background-color: #9b01b6; /* Background color of the button */
-            color: white; /* Text color */
-            border: none; /* No border */
-            border-radius: 50%; /* Makes the button circular */
-            width: 60px; /* Width of the button */
-            height: 60px; /* Height of the button */
-            display: flex; /* Flexbox to center the icon */
-            justify-content: center; /* Center the icon horizontally */
-            align-items: center; /* Center the icon vertically */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
-            font-size: 24px; /* Size of the icon */
-            text-decoration: none; /* No underline */
-            transition: background-color 0.3s ease; /* Smooth background color transition */
-        }
-        
-        .float-button:hover {
-            background-color: #780186; /* Darker shade on hover */
-        }
-        
-        @media (max-width: 480px) {
-            .float-button {
-                width: 50px; /* Adjust button size for smaller screens */
-                height: 50px; /* Adjust button size for smaller screens */
-                font-size: 20px; /* Adjust icon size for smaller screens */
-            }
-        }
-        
+     /* Floating Button Styles */
+.float-button {
+    position: fixed;
+    bottom: 20px; /* Position from the bottom */
+    right: 20px; /* Position from the right */
+    background-color: #9b01b6; /* Background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 50%; /* Circular shape */
+    width: 60px; /* Width */
+    height: 60px; /* Height */
+    display: flex; /* Flexbox */
+    justify-content: center; /* Center the icon */
+    align-items: center; /* Center the icon */
+    font-size: 24px; /* Icon size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow */
+    transition: background-color 0.3s; /* Transition effect */
+    text-decoration: none;
+}
+
+.float-button:hover {
+    background-color: #a60c7a; /* Darker on hover */
+}
+
+/* Modal Styles */
+.modal {
+    display: absolute; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 30%;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(249, 5, 5, 0); /* Black w/ opacity */
+}
+
+.modal-content {
+    backdrop-filter: blur(10px);
+color: rgb(173, 1, 167);
+    display: absolute; 
+    top: 40%;
+    background-color: #faf7fb; /* White background */
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px; /* Padding */
+    border: 1px solid #888; /* Border */
+    width: 80%; /* Width of modal */
+    max-width: 500px; /* Maximum width */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.close-button {
+    color: #aaa; /* Close button color */
+    float: right; /* Float to the right */
+    font-size: 28px; /* Font size */
+    font-weight: bold; /* Font weight */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black; /* Change color on hover */
+    text-decoration: none; /* No underline */
+    cursor: pointer; /* Pointer cursor */
+}
+
+
+
+/* Change placeholder color */
+.search-container input::placeholder {
+    color: #ffffff; /* Set your desired placeholder color */
+    opacity: 0.7; /* Optional: adjust the opacity for a faded effect */
+}
+
+/* You can also set styles for different input sizes */
+@media screen and (max-width: 768px) {
+    .search-container input::placeholder {
+        color: #ffffff; /* Same or different color for smaller screens */
+    }
+}
+
     </style>
 
     <script type="module">
@@ -428,6 +476,35 @@
                 window.location.href = '../login'; // Adjust to your login page URL
             });
     
+
+
+            // Get modal element
+const modal = document.getElementById("welcomeModal");
+
+// Get open modal button
+const openModalButton = document.getElementById("openModal");
+
+// Get close button
+const closeModalButton = document.getElementById("closeModal");
+
+// Listen for open click
+openModalButton.addEventListener("click", function(e) {
+    e.preventDefault(); // Prevent default anchor behavior
+    modal.style.display = "block"; // Show the modal
+});
+
+// Listen for close click
+closeModalButton.addEventListener("click", function() {
+    modal.style.display = "none"; // Hide the modal
+});
+
+// Listen for outside click to close modal
+window.addEventListener("click", function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none"; // Hide the modal if clicked outside
+    }
+});
+
     </script>
 </head>
 <body>
@@ -449,9 +526,19 @@
     </div>
 
     <!-- Floating Button -->
-<a href="#" class="float-button">
+<!-- Floating Button -->
+<a href="#" class="float-button" id="openModal">
     <i class="fas fa-plus"></i> <!-- Icon for the button -->
 </a>
+
+<!-- Modal Structure -->
+<div id="welcomeModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="closeModal">&times;</span>
+        <h1>Welcome!</h1>
+        <p>Welcome to our site! We hope you enjoy your experience.</p>
+    </div>
+</div>
 
 
     <div class="modal" id="networkModal">
