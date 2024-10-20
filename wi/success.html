@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Success</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            text-align: center; /* Center align text in the body */
+        }
+
+        .success-message {
+            font-size: 40px;
+            font-weight: 1000;
+            color: #bf0db2;
+            opacity: 0; /* Start hidden */
+            transform: translateY(-30px); /* Start above */
+            animation: fadeIn 1s forwards; /* Apply animation */
+            animation-delay: 0.5s; /* Delay before animation starts */
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1; /* Fully visible */
+                transform: translateY(0); /* Move to original position */
+            }
+        }
+
+        .sub-message {
+            font-size: 18px;
+            color: #bf0db2;
+            margin-top: 20px;
+            opacity: 0; /* Start hidden */
+            transform: translateY(-20px); /* Start above */
+            animation: fadeIn 1s forwards; /* Apply animation */
+            animation-delay: 1s; /* Delay before animation starts */
+            max-width: 300px; /* Limit width for mobile */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+            word-wrap: break-word; /* Allow words to break */
+        }
+
+        @media (max-width: 600px) {
+            .sub-message {
+                font-size: 16px; /* Adjust font size for mobile */
+                line-height: 1.5; /* Improve line spacing */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <div class="success-message">Withdrawal Successful!</div>
+        <div class="sub-message">The amount will be transferred in 2 working days.</div>
+    </div>
+
+    <script>
+        // Redirect to another page after a delay
+        setTimeout(() => {
+            window.location.href = '../home'; // Change to your target page
+        }, 5000); // Redirect after 5 seconds
+    </script>
+</body>
+</html>

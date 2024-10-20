@@ -1,1 +1,377 @@
-<h1>widthdraw</h1>
+<html>
+<head>
+    <title>Bintex Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px; /* Padding for larger screens */
+            background-color: #eb86ff;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            left: 0;
+            margin-bottom: 20px;
+          
+        }
+        
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column; /* Stack items vertically */
+                padding: 15px; /* Adjust padding for smaller screens */
+                align-items: flex-start; /* Align items to the start */
+            }
+        
+            .header > * {
+                margin-bottom: 10px; /* Space between items */
+            }
+        
+            .header > :last-child {
+                margin-bottom: 0; /* Remove bottom margin for the last item */
+            }
+        }
+        
+        .header img {
+            height: 30px;
+        }
+        .header .icons {
+            display: flex;
+            gap: 15px;
+            color: #ffffff;
+        }
+        .header .icons i {
+            font-size: 20px;
+        }
+        .dashboard {
+            margin-top: 60px;
+        }
+        .dashboard h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .asset-value {
+            background-color: #ffffff;
+            color: #bf0db2;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .asset-value h2 {
+            font-size: 36px;
+            margin: 0;
+        }
+        .asset-value p {
+            margin: 5px 0;
+        }
+        .asset-value .profit {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .buttons .withdraw {
+            background-color: #bf0db2;
+            color: #fff;
+        }
+        .buttons .deposit {
+            background-color: #d7ff00;
+            color: #000;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .actions .action {
+            flex: 1;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .actions .action i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .actions .action.help {
+            background-color: #fff;
+            color: #000;
+        }
+        .watchlist {
+            margin-bottom: 20px;
+        }
+        .watchlist h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .watchlist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .watchlist-item img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        .watchlist-item .info {
+            display: flex;
+            align-items: center;
+        }
+        .watchlist-item .info p {
+            margin: 0;
+        }
+        .watchlist-item .info .name {
+            font-size: 16px;
+        }
+        .watchlist-item .info .symbol {
+            font-size: 12px;
+            color: #aaa;
+        }
+        .watchlist-item .price {
+            text-align: right;
+        }
+        .watchlist-item .price .value {
+            font-size: 16px;
+        }
+        .watchlist-item .price .change {
+            font-size: 12px;
+            color: #0f0;
+        }
+      
+
+        /* Slider Styles */
+        input[type="range"] {
+            -webkit-appearance: none; /* Override default CSS styles */
+            appearance: none;
+            width: 100%; /* Full-width */
+            height: 20px; /* Slider height */
+            background: #ffffff; /* Slider background */
+            border-radius: 5px; /* Rounded corners */
+            outline: none; /* No outline */
+            transition: background 0.3s; /* Transition effect */
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default styles */
+            appearance: none;
+            width: 35px; /* Thumb width */
+            height: 35px; /* Thumb height */
+            border-radius: 50%; /* Circular thumb */
+            background: #eb86ff; /* Thumb color */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 25px; /* Thumb width */
+            height: 25px; /* Thumb height */
+            border-radius: 50%; /* Circular thumb */
+            background: #d9ff00; /* Thumb color */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        input[type="range"]:focus {
+            outline: none; /* No outline on focus */
+        }
+
+        input[type="range"]:hover {
+            background: #eb27f9; /* Change background on hover */
+        }
+
+        /* Display Styles */
+        #amount-display {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        /* UPI ID Input Field Styles */
+#upi-id {
+    width: 100%; /* Full width */
+    padding: 15px; /* Padding for comfort */
+    border: 2px solid #eb86ff; /* Border color */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #ffffff; /* Input background color */
+    color: #fff; /* Text color */
+    font-size: 16px; /* Font size */
+    margin-bottom: 20px; /* Space below input */
+    transition: border-color 0.3s; /* Transition for focus effect */
+}
+
+/* Change border color on focus */
+#upi-id:focus {
+    border-color: #fff; /* Border color on focus */
+    outline: none; /* Remove outline */
+}
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <div class="icons">
+                <i class="fas fa-tags"></i>
+            </div>
+        </div>
+        <div class="dashboard">
+            <h1 style="color: #bf0db2;">Dashboard</h1>
+            <div class="asset-value">
+                <p>Current balance</p>
+                <h2 id="balance-display">₹0.00</h2>
+            </div>
+            <input type="text" id="upi-id" placeholder="Enter UPI ID" />
+            <div>
+                <input type="range" id="amount" min="200" max="1000" step="1" value="200">
+                <p id="amount-display" style="margin-top: 20px; color:#bf0db2;">Min-Amount: ₹200.00</p>
+            </div>
+
+            <div class="buttons">
+                <button class="withdraw" id="withdraw-btn">Withdraw</button>
+            </div>
+
+            <p id="message" style="color: #ab08ae;"></p>
+        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+            import { getDatabase, ref, update, onValue , get } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+            // Your Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+                authDomain: "dropshipping-98eb5.firebaseapp.com",
+                projectId: "dropshipping-98eb5",
+                storageBucket: "dropshipping-98eb5.appspot.com",
+                messagingSenderId: "904925867242",
+                appId: "1:904925867242:web:af0abda866826e92f8fb93",
+                measurementId: "G-BVZR8HY1SR"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+
+            // Get logged-in user data from local storage
+            const userData = JSON.parse(localStorage.getItem('user')); // Ensure this matches your local storage key
+
+            // Fetch and display wallet balance on page load
+            if (userData && userData.uid) {
+                const userRef = ref(db, 'users/' + userData.uid);
+                onValue(userRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userWallet = snapshot.val().wallet;
+                        document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`; // Display balance
+                        document.getElementById('amount').max = Math.min(userWallet, 1000); // Set max value of the range slider to the lesser of user balance or 1000
+                    } else {
+                        console.error("No wallet data available.");
+                    }
+                });
+            } else {
+                document.getElementById('balance-display').textContent = "User not found.";
+            }
+
+            // Update amount display when slider is moved
+            document.getElementById('amount').oninput = function () {
+                const amount = parseFloat(this.value);
+                document.getElementById('amount-display').textContent = `Amount: ₹${amount.toFixed(2)}`;
+            };
+
+// Withdraw button event listener
+document.getElementById('withdraw-btn').onclick = function () {
+    const amount = parseFloat(document.getElementById('amount').value);
+    const upiId = document.getElementById('upi-id').value.trim(); // Get UPI ID input
+    const userRef = ref(db, 'users/' + userData.uid);
+
+    if (userData && userData.uid) {
+        // Retrieve the user's current wallet balance from Firebase
+        get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const userWallet = snapshot.val().wallet; // Assuming wallet balance is stored under 'wallet'
+
+                // Check if the amount exceeds the user's current balance
+                if (amount > userWallet) {
+                    document.getElementById('message').textContent = "Insufficient funds!";
+                    return; // Exit the function if not enough funds
+                }
+
+                // Check if the amount is below the minimum withdrawal limit
+                if (amount < 200) {
+                    document.getElementById('message').textContent = "Minimum withdrawal amount is ₹200.";
+                    return; // Exit the function if amount is less than 200
+                }
+
+                // Calculate the new balance after withdrawal
+                const newBalance = userWallet - amount;
+
+                // Prepare the withdrawal data
+                const withdrawalData = {
+                    amount: amount,
+                    upiId: upiId,
+                    timestamp: new Date().toISOString() // Record the withdrawal timestamp
+                };
+
+                // Store withdrawal data in Firebase under the "withdraw" node
+                const withdrawalRef = ref(db, 'withdraw/' + userData.uid); // Use user ID to keep withdrawals unique
+                update(withdrawalRef, withdrawalData).then(() => {
+                    // Update the user's wallet balance in Firebase
+                    update(userRef, { wallet: newBalance }).then(() => {
+                        document.getElementById('message').textContent = "Withdrawal successful!";
+                        // Update the displayed balance to reflect the new balance
+                        document.getElementById('balance-display').textContent = `₹${newBalance.toFixed(2)}`; 
+                        
+                        // Redirect to another page after a 3-second delay
+                        setTimeout(() => {
+                            window.location.href = 'success.html'; // Change 'success.html' to your target page
+                        }, 3000); // 3000 milliseconds = 3 seconds
+                    }).catch((error) => {
+                        console.error("Error updating wallet: ", error);
+                        document.getElementById('message').textContent = "Withdrawal failed. Please try again.";
+                    });
+                }).catch((error) => {
+                    console.error("Error storing withdrawal data: ", error);
+                    document.getElementById('message').textContent = "Failed to store withdrawal data.";
+                });
+            } else {
+                document.getElementById('message').textContent = "User not found.";
+            }
+        }).catch((error) => {
+            console.error("Error retrieving user data: ", error);
+            document.getElementById('message').textContent = "Failed to retrieve user data.";
+        });
+    } else {
+        document.getElementById('message').textContent = "User not found.";
+    }
+};
+
+
+        </script>
+    </div>
+   
+</body>
+</html>
