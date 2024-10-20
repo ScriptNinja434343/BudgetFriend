@@ -388,6 +388,13 @@ border-radius: 10px;
    font-weight: 1000;
    font-size: 14px;
 }
+
+.wi{
+    background-color: #7c0176;
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+}
     </style>
 
   <script type="module">
@@ -649,32 +656,7 @@ function getStarsString(rating) {
 
 
 
-        // Get modal element
-const modal = document.getElementById("welcomeModal");
 
-// Get open modal button
-const openModalButton = document.getElementById("openModal");
-
-// Get close button
-const closeModalButton = document.getElementById("closeModal");
-
-// Listen for open click
-openModalButton.addEventListener("click", function(e) {
-e.preventDefault(); // Prevent default anchor behavior
-modal.style.display = "block"; // Show the modal
-});
-
-// Listen for close click
-closeModalButton.addEventListener("click", function() {
-modal.style.display = "none"; // Hide the modal
-});
-
-// Listen for outside click to close modal
-window.addEventListener("click", function(event) {
-if (event.target === modal) {
-    modal.style.display = "none"; // Hide the modal if clicked outside
-}
-});
     function displayUserName() {
         const savedUser = localStorage.getItem('user');
         if (savedUser) {
@@ -736,11 +718,12 @@ if (userData && userData.uid) {
 
     <div class="header">
         <div class="logo"><i class="fa-solid fa-tag"></i></div>
-
+<a href="..\wi">
         <div class="wallet-display">
             <i class="fas fa-wallet"></i> <!-- Font Awesome Wallet Icon -->
             <span class="balance-amount">0.0</span></span> <!-- Placeholder for the wallet balance -->
         </div>
+    </a>
         <button class="button" id="logout-button"><i class="fa-solid fa-right-from-bracket"></i></button>
 
         </div>
@@ -764,14 +747,7 @@ if (userData && userData.uid) {
     <i class="fas fa-plus"></i> <!-- Icon for the button -->
 </button>
 
-<!-- Modal Structure -->
-<div id="welcomeModal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" id="closeModal">&times;</span>
-        <h1>Welcome!</h1>
-        <p>Welcome to our site! We hope you enjoy your experience.</p>
-    </div>
-</div>
+
 
 
     <div class="modal" id="networkModal">
