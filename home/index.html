@@ -15,6 +15,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Catamaran:800|Montserrat|Open+Sans:400,800&display=swap');
 
@@ -363,19 +366,34 @@ color: rgb(173, 1, 167);
 }
 
 .user-name{
-    font-family: "DynaPuff", system-ui;
+    font-family: "DM Serif Text", serif;
     color:  #9b01b6;
-    font-weight: 1000;
+    font-weight: 500;
+    font-size: 30px;
     
 }
 
+.wallet-display{
+    background-color: #f6cbff;
+    color:  #9b01b6;
+border-radius: 10px;
+    position: absolute;
+    padding: 10px;
+    top: 9px;
+    right: 60px;
+}
 
+
+.balance-amount{
+   font-weight: 1000;
+   font-size: 14px;
+}
     </style>
 
   <script type="module">
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    import { getDatabase, ref, onValue , get , update } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 
@@ -395,7 +413,7 @@ color: rgb(173, 1, 167);
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
     const auth = getAuth(app);
-
+    const db = getDatabase(app);
     let productsData = []; // Store products data
 
     // Check authentication state
@@ -427,7 +445,6 @@ color: rgb(173, 1, 167);
         const productList = document.querySelector('.product-list');
         productList.innerHTML = ''; // Clear existing products
     
-        // Check local storage once to avoid redundant calls inside the loop
         const sharedProducts = Object.keys(products).reduce((acc, key) => {
             const shareButtonState = localStorage.getItem(`shareButtonState-${key}`);
             acc[key] = shareButtonState === 'shared'; // true if shared
@@ -451,26 +468,42 @@ color: rgb(173, 1, 167);
                     </button>
                 `;
     
-                // If shared, disable the button
                 if (sharedProducts[key]) {
                     const shareButton = productItem.querySelector('.share-btn');
                     shareButton.disabled = true; // Keep the button disabled
                 }
     
-              
-    
-                // Add event listener for WhatsApp share button
                 const shareButton = productItem.querySelector('.share-btn');
-                shareButton.onclick = (event) => {
-                    event.stopPropagation(); // Prevent triggering the product link
-                    shareOnWhatsApp(product);
+                shareButton.onclick = async (event) => {
+                    event.stopPropagation();
+                    shareOnWhatsApp(product); // Your function to share on WhatsApp
     
-                    // Replace the button content with a success symbol
                     shareButton.innerHTML = '<i class="fa-solid fa-check-circle"></i>&nbsp;Shared';
-                    shareButton.disabled = true; // Optionally disable the button to prevent multiple clicks
+                    shareButton.disabled = true;
     
-                    // Store the state in local storage to remember it for the logged-in user
                     localStorage.setItem(`shareButtonState-${key}`, 'shared');
+    
+                    const user = getAuth().currentUser;
+                    if (user) {
+                        const uid = user.uid;
+                        const walletAmount = 0.75; // Amount to add
+                        const userRef = ref(getDatabase(), `users/${uid}`);
+                        
+                        try {
+                            const snapshot = await get(userRef);
+                            if (snapshot.exists()) {
+                                const userData = snapshot.val();
+                                const updatedWallet = (userData.wallet || 0) + walletAmount;
+    
+                                await update(userRef, { wallet: updatedWallet });
+                                console.log(`Updated wallet for user ${uid} to ${updatedWallet}`);
+                            } else {
+                                console.log("No user data found for UID:", uid);
+                            }
+                        } catch (error) {
+                            console.error("Error updating wallet:", error);
+                        }
+                    }
                 };
     
                 productList.appendChild(productItem);
@@ -547,21 +580,8 @@ function getStarsString(rating) {
         return starsHTML;
     }
 
-    // Show shimmer effect while loading
-    function showShimmerEffect() {
-        const productList = document.querySelector('.product-list');
-        productList.innerHTML = ''; // Clear existing products
-        for (let i = 0; i < 12; i++) {
-            const shimmerWrapper = document.createElement('div');
-            shimmerWrapper.className = 'shimmer-wrapper';
-            shimmerWrapper.innerHTML = `
-                <div class="shimmer" style="width: 100%; height: 150px;"></div>
-                <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
-                <div class="shimmer" style="width: 60%; height: 20px;"></div>
-            `;
-            productList.appendChild(shimmerWrapper);
-        }
-    }
+ 
+    
 
     // Filter products based on search input
     function filterProducts() {
@@ -585,11 +605,37 @@ function getStarsString(rating) {
         return result;
     }
 
+ 
+    function showShimmerEffect() {
+        const productList = document.querySelector('.product-list');
+        productList.innerHTML = ''; // Clear existing products if any
+    
+        // Display 12 shimmer placeholders
+        for (let i = 0; i < 12; i++) {
+            const shimmerWrapper = document.createElement('div');
+            shimmerWrapper.className = 'shimmer-wrapper';
+            shimmerWrapper.innerHTML = `
+                <div class="shimmer" style="width: 100%; height: 200px;"></div>
+                <div class="shimmer" style="width: 80%; height: 20px; margin: 10px 0;"></div>
+                <div class="shimmer" style="width: 60%; height: 20px;"></div>
+            `;
+            productList.appendChild(shimmerWrapper);
+        }
+    }
+    
+    
+    
    
     window.onload = function() {
-        showShimmerEffect();
-        document.querySelector('.search-container input').addEventListener('input', filterProducts);
-    }
+        showShimmerEffect(); // Show shimmer placeholders immediately on page load
+    
+        // Start fetching the product data after a short delay to allow shimmer to display
+        setTimeout(() => {
+            fetchProducts();
+        }, 1000); // Adjust the timeout as necessary
+    };
+    
+
 
    
     
@@ -643,9 +689,45 @@ if (event.target === modal) {
         }
     }
     
+
+    // Function to fetch wallet data for a specific UID
+async function fetchWalletData(uid) {
+    const userRef = ref(db, 'users/' + uid);
+    try {
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            displayWalletData(userData.wallet); // Call the function to display wallet data
+        } else {
+            console.error("No data available for the user.");
+        }
+    } catch (error) {
+        console.error("Error fetching wallet data:", error);
+    }
+}
+
+// Function to display the wallet data on the page
+function displayWalletData(walletAmount) {
+    const walletDisplay = document.querySelector('.balance-amount');
+    if (walletDisplay) {
+        walletDisplay.textContent = ` ₹${walletAmount.toFixed(2)}`; // Format the amount
+    } else {
+        console.error("Wallet display element not found.");
+    }
+}
+
+// Get logged-in user data from local storage
+const userData = JSON.parse(localStorage.getItem('user')); // Change 'userData' to your local storage key
+
+if (userData && userData.uid) {
+    fetchWalletData(userData.uid); // Fetch wallet data using the UID from local storage
+} else {
+    console.error("User data not found in local storage.");
+}
+    
     // Call the function when the page loads
     window.onload = displayUserName;
-    
+    document.addEventListener('DOMContentLoaded', showShimmerEffect);
 </script>
 
 </head>
@@ -654,8 +736,11 @@ if (event.target === modal) {
 
     <div class="header">
         <div class="logo"><i class="fa-solid fa-tag"></i></div>
-        <div class="search-container">
-            <input type="text" placeholder="Search products...">
+
+        <div class="wallet-display">
+            <i class="fas fa-wallet"></i> <!-- Font Awesome Wallet Icon -->
+            <span class="balance-amount">0.0</span></span> <!-- Placeholder for the wallet balance -->
+        </div>
         <button class="button" id="logout-button"><i class="fa-solid fa-right-from-bracket"></i></button>
 
         </div>
