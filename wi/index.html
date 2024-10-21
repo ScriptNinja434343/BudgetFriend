@@ -342,16 +342,28 @@ if (userData && userData.uid) {
     // Show a loading message or spinner
     document.getElementById('loading').style.display = 'block';
 
+    // Use get to fetch wallet balance once
     get(userRef).then((snapshot) => {
         // Hide the loading message or spinner
         document.getElementById('loading').style.display = 'none';
 
         if (snapshot.exists()) {
             const userWallet = snapshot.val().wallet;
-            document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`; // Display balance
-            document.getElementById('amount').max = Math.min(userWallet, 1000); // Set max value of the range slider
+
+            // Log the userWallet to debug its value
+            console.log("User Wallet:", userWallet);
+
+            // Check if userWallet is defined and is a number
+            if (userWallet !== undefined && typeof userWallet === 'number') {
+                document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`; // Display balance
+                document.getElementById('amount').max = Math.min(userWallet, 1000); // Set max value of the range slider
+            } else {
+                console.error("Wallet is undefined or not a number.");
+                document.getElementById('message').textContent = "Wallet data is invalid.";
+            }
         } else {
             console.error("No wallet data available.");
+            document.getElementById('message').textContent = "No wallet data available.";
         }
     }).catch((error) => {
         console.error("Error retrieving user data: ", error);
@@ -361,8 +373,6 @@ if (userData && userData.uid) {
 } else {
     document.getElementById('balance-display').textContent = "User not found.";
 }
-
-
 
         </script>
   
