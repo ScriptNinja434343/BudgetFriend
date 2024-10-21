@@ -191,21 +191,26 @@
                 padding: 12px; /* Smaller UPI input */
                 font-size: 14px;
             }
+
+            .toast{
+                left: 4%;
+                top: 100px;
+            }
         }
 
         .toast {
             visibility: hidden; /* Hidden by default */
             min-width: 250px; /* Minimum width */
             margin-left: -125px; /* Center the toast */
-            background-color: #333; /* Black background */
+            background-color: #eb86ff   ; /* Black background */
             color: #fff; /* White text */
             text-align: center; /* Centered text */
-            border-radius: 2px; /* Rounded corners */
+            border-radius: 30px; /* Rounded corners */
             padding: 16px; /* Padding */
             position: fixed; /* Position fixed */
             z-index: 1; /* Sit on top */
-            left: 50%; /* Center horizontally */
-            bottom: 30px; /* 30px from the bottom */
+            left: 47%; /* Center horizontally */
+            top: 60px; /* 30px from the bottom */
             font-size: 17px; /* Font size */
             transition: visibility 0s, opacity 0.5s linear; /* Transition effects */
         }
@@ -302,99 +307,89 @@
 
             
 
-
-// Withdraw button event listener
-// Disable the withdraw button initially
-document.getElementById('withdraw-btn').disabled = true;
-
-// Enable the button only if the UPI ID is entered
-document.getElementById('upi-id').oninput = function () {
-    const upiId = this.value.trim();
-    document.getElementById('withdraw-btn').disabled = !upiId; // Enable button if UPI ID is not empty
-};
-
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.classList.add('show'); // Add the show class to make it visible
-
-    // Hide the toast after 3 seconds
-    setTimeout(() => {
-        toast.classList.remove('show'); // Remove the show class
-    }, 3000); // 3000 milliseconds = 3 seconds
-}
-
-document.getElementById('withdraw-btn').onclick = function () {
-    const amount = parseFloat(document.getElementById('amount').value);
-    const upiId = document.getElementById('upi-id').value.trim(); // Get UPI ID input
-    const userRef = ref(db, 'users/' + userData.uid);
-
-    if (!upiId) {
-        showToast("Please enter your UPI ID."); // Show toast if UPI ID is empty
-        return; // Exit if UPI ID is not provided
-    }
-
-    if (userData && userData.uid) {
-        // Retrieve the user's current wallet balance from Firebase
-        get(userRef).then((snapshot) => {
-            if (snapshot.exists()) {
-                const userWallet = snapshot.val().wallet; // Assuming wallet balance is stored under 'wallet'
-
-                // Check if the amount exceeds the user's current balance
-                if (amount > userWallet) {
-                    showToast("Insufficient funds!"); // Show toast instead
-                    return; // Exit the function if not enough funds
-                }
-
-                // Check if the amount is below the minimum withdrawal limit
-                if (amount < 200) {
-                    showToast("Minimum withdrawal amount is ₹200."); // Show toast instead
-                    return; // Exit the function if amount is less than 200
-                }
-
-                // Calculate the new balance after withdrawal
-                const newBalance = userWallet - amount;
-
-                // Prepare the withdrawal data
-                const withdrawalData = {
-                    amount: amount,
-                    upiId: upiId,
-                    timestamp: new Date().toISOString() // Record the withdrawal timestamp
-                };
-
-                // Generate a unique key for each withdrawal
-                const withdrawalRef = ref(db, 'withdraw/' + userData.uid + '/' + Date.now()); // Use current timestamp as a unique key
-                update(withdrawalRef, withdrawalData).then(() => {
-                    // Update the user's wallet balance in Firebase
-                    update(userRef, { wallet: newBalance }).then(() => {
-                        showToast("Withdrawal successful!"); // Show toast instead
-                        // Update the displayed balance to reflect the new balance
-                        document.getElementById('balance-display').textContent = `₹${newBalance.toFixed(2)}`; 
-                        
-                        // Redirect to another page after a 3-second delay
-                        setTimeout(() => {
-                            window.location.href = 'success.html'; // Change 'success.html' to your target page
-                        }, 3000); // 3000 milliseconds = 3 seconds
-                    }).catch((error) => {
-                        console.error("Error updating wallet: ", error);
-                        showToast("Withdrawal failed. Please try again."); // Show toast instead
-                    });
-                }).catch((error) => {
-                    console.error("Error storing withdrawal data: ", error);
-                    showToast("Failed to store withdrawal data."); // Show toast instead
-                });
-            } else {
-                showToast("User not found."); // Show toast instead
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message; // Set the toast message
+                toast.classList.add('show'); // Show the toast
+            
+                // Hide the toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show'); // Remove the show class
+                }, 3000); // 3000 milliseconds = 3 seconds
             }
-        }).catch((error) => {
-            console.error("Error retrieving user data: ", error);
-            showToast("Failed to retrieve user data."); // Show toast instead
-        });
-    } else {
-        showToast("User not found."); // Show toast instead
-    }
-};
-
+            
+            document.getElementById('withdraw-btn').onclick = function () {
+                const amount = parseFloat(document.getElementById('amount').value);
+                const upiId = document.getElementById('upi-id').value.trim(); // Get UPI ID input
+                const userRef = ref(db, 'users/' + userData.uid);
+            
+                // Check if the UPI ID is empty
+                if (!upiId) {
+                    showToast("Please enter your UPI ID."); // Show toast if UPI ID is empty
+                    return; // Exit if UPI ID is not provided
+                }
+            
+                if (userData && userData.uid) {
+                    // Retrieve the user's current wallet balance from Firebase
+                    get(userRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userWallet = snapshot.val().wallet; // Assuming wallet balance is stored under 'wallet'
+            
+                            // Check if the amount exceeds the user's current balance
+                            if (amount > userWallet) {
+                                showToast("Insufficient funds!"); // Show toast instead
+                                return; // Exit the function if not enough funds
+                            }
+            
+                            // Check if the amount is below the minimum withdrawal limit
+                            if (amount < 200) {
+                                showToast("Minimum withdrawal amount is ₹200."); // Show toast instead
+                                return; // Exit the function if amount is less than 200
+                            }
+            
+                            // Calculate the new balance after withdrawal
+                            const newBalance = userWallet - amount;
+            
+                            // Prepare the withdrawal data
+                            const withdrawalData = {
+                                amount: amount,
+                                upiId: upiId,
+                                timestamp: new Date().toISOString() // Record the withdrawal timestamp
+                            };
+            
+                            // Generate a unique key for each withdrawal
+                            const withdrawalRef = ref(db, 'withdraw/' + userData.uid + '/' + Date.now()); // Use current timestamp as a unique key
+                            update(withdrawalRef, withdrawalData).then(() => {
+                                // Update the user's wallet balance in Firebase
+                                update(userRef, { wallet: newBalance }).then(() => {
+                                    showToast("Withdrawal successful!"); // Show toast instead
+                                    // Update the displayed balance to reflect the new balance
+                                    document.getElementById('balance-display').textContent = `₹${newBalance.toFixed(2)}`; 
+                                    
+                                    // Redirect to another page after a 3-second delay
+                                    setTimeout(() => {
+                                        window.location.href = 'success.html'; // Change 'success.html' to your target page
+                                    }, 3000); // 3000 milliseconds = 3 seconds
+                                }).catch((error) => {
+                                    console.error("Error updating wallet: ", error);
+                                    showToast("Withdrawal failed. Please try again."); // Show toast instead
+                                });
+                            }).catch((error) => {
+                                console.error("Error storing withdrawal data: ", error);
+                                showToast("Failed to store withdrawal data."); // Show toast instead
+                            });
+                        } else {
+                            showToast("User not found."); // Show toast instead
+                        }
+                    }).catch((error) => {
+                        console.error("Error retrieving user data: ", error);
+                        showToast("Failed to retrieve user data."); // Show toast instead
+                    });
+                } else {
+                    showToast("User not found."); // Show toast instead
+                }
+            };
+            
 
 
         </script>
