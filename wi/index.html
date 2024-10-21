@@ -2,6 +2,8 @@
 <head>
     <title>Bintex Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport meta for mobile scaling -->
+ 
     <style>
         body {
             margin: 0;
@@ -17,33 +19,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px; /* Padding for larger screens */
+            padding: 20px;
             background-color: #eb86ff;
             position: absolute;
             top: 0;
             width: 100%;
             left: 0;
             margin-bottom: 20px;
-          
         }
-        
-        /* Media query for mobile responsiveness */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column; /* Stack items vertically */
-                padding: 15px; /* Adjust padding for smaller screens */
-                align-items: flex-start; /* Align items to the start */
-            }
-        
-            .header > * {
-                margin-bottom: 10px; /* Space between items */
-            }
-        
-            .header > :last-child {
-                margin-bottom: 0; /* Remove bottom margin for the last item */
-            }
-        }
-        
+
         .header img {
             height: 30px;
         }
@@ -55,8 +39,9 @@
         .header .icons i {
             font-size: 20px;
         }
+
         .dashboard {
-            margin-top: 60px;
+            margin-top: 100px; /* Adjust for mobile */
         }
         .dashboard h1 {
             font-size: 24px;
@@ -76,11 +61,7 @@
         .asset-value p {
             margin: 5px 0;
         }
-        .asset-value .profit {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+
         .buttons {
             display: flex;
             gap: 10px;
@@ -102,79 +83,17 @@
             background-color: #d7ff00;
             color: #000;
         }
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .actions .action {
-            flex: 1;
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .actions .action i {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .actions .action.help {
-            background-color: #fff;
-            color: #000;
-        }
-        .watchlist {
-            margin-bottom: 20px;
-        }
-        .watchlist h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        .watchlist-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .watchlist-item img {
-            height: 30px;
-            margin-right: 10px;
-        }
-        .watchlist-item .info {
-            display: flex;
-            align-items: center;
-        }
-        .watchlist-item .info p {
-            margin: 0;
-        }
-        .watchlist-item .info .name {
-            font-size: 16px;
-        }
-        .watchlist-item .info .symbol {
-            font-size: 12px;
-            color: #aaa;
-        }
-        .watchlist-item .price {
-            text-align: right;
-        }
-        .watchlist-item .price .value {
-            font-size: 16px;
-        }
-        .watchlist-item .price .change {
-            font-size: 12px;
-            color: #0f0;
-        }
-      
 
         /* Slider Styles */
         input[type="range"] {
             -webkit-appearance: none; /* Override default CSS styles */
             appearance: none;
             width: 100%; /* Full-width */
-            height: 20px; /* Slider height */
+            height: 50px; /* Slider height */
+            padding-left: 10px;
+            padding-right: 10px;
             background: #ffffff; /* Slider background */
-            border-radius: 5px; /* Rounded corners */
+            border-radius: 30px; /* Rounded corners */
             outline: none; /* No outline */
             transition: background 0.3s; /* Transition effect */
         }
@@ -187,6 +106,7 @@
             border-radius: 50%; /* Circular thumb */
             background: #eb86ff; /* Thumb color */
             cursor: pointer; /* Pointer cursor on hover */
+            
         }
 
         input[type="range"]::-moz-range-thumb {
@@ -211,23 +131,67 @@
             font-size: 18px;
         }
         /* UPI ID Input Field Styles */
-#upi-id {
-    width: 100%; /* Full width */
-    padding: 15px; /* Padding for comfort */
-    border: 2px solid #eb86ff; /* Border color */
-    border-radius: 10px; /* Rounded corners */
-    background-color: #ffffff; /* Input background color */
-    color: #fff; /* Text color */
-    font-size: 16px; /* Font size */
-    margin-bottom: 20px; /* Space below input */
-    transition: border-color 0.3s; /* Transition for focus effect */
-}
+        #upi-id {
+            width: 100%; /* Full width */
+            padding: 15px; /* Padding for comfort */
+            border: 2px solid #eb86ff; /* Border color */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #ffffff; /* Input background color */
+            color: #000; /* Text color */
+            font-size: 16px; /* Font size */
+            margin-bottom: 20px; /* Space below input */
+            transition: border-color 0.3s; /* Transition for focus effect */
+        }
 
-/* Change border color on focus */
-#upi-id:focus {
-    border-color: #fff; /* Border color on focus */
-    outline: none; /* Remove outline */
-}
+        /* Change border color on focus */
+        #upi-id:focus {
+            border-color: #fff; /* Border color on focus */
+            outline: none; /* Remove outline */
+        }
+
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+
+            body{
+                overflow: hidden;
+            }
+
+            .icons{
+                width: 100px;
+                font-size: 200px    ;
+            }
+            .header {
+                flex-direction: column;
+                padding: 10px;
+                align-items: flex-start;
+                width: 95%;
+            }
+            .dashboard h1 {
+                font-size: 20px; /* Smaller font size for headings */
+            }
+            .asset-value {
+                padding: 15px;
+            }
+            .asset-value h2 {
+                font-size: 28px; /* Smaller balance font */
+            }
+            .buttons button {
+                padding: 10px; /* Smaller buttons for mobile */
+                font-size: 14px;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                width: 35px; /* Smaller slider thumb */
+                height: 35px;
+            }
+            input[type="range"]::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+            }
+            #upi-id {
+                padding: 12px; /* Smaller UPI input */
+                font-size: 14px;
+            }
+        }
 
     </style>
 </head>
@@ -245,7 +209,7 @@
                 <p>Current balance</p>
                 <h2 id="balance-display">₹0.00</h2>
             </div>
-            <input type="text" id="upi-id" placeholder="Enter UPI ID" />
+            <input type="text" id="upi-id" placeholder="Enter UPI ID or Mobile Number" />
             <div>
                 <input type="range" id="amount" min="200" max="1000" step="1" value="200">
                 <p id="amount-display" style="margin-top: 20px; color:#bf0db2;">Min-Amount: ₹200.00</p>
