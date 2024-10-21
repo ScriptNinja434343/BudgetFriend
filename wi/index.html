@@ -207,7 +207,9 @@
             <h1 style="color: #bf0db2;">Dashboard</h1>
             <div class="asset-value">
                 <p>Current balance</p>
-                <h2 id="balance-display">₹0.00</h2>
+                <h2 id="balance-display"><div id="loading" style="display:none;">Loading...</div>
+                </h2>
+                
             </div>
             <input type="text" id="upi-id" placeholder="Enter UPI ID or Mobile Number" />
             <div>
@@ -333,9 +335,37 @@ document.getElementById('withdraw-btn').onclick = function () {
     }
 };
 
+// Fetch and display wallet balance on page load
+if (userData && userData.uid) {
+    const userRef = ref(db, 'users/' + userData.uid);
+    
+    // Show a loading message or spinner
+    document.getElementById('loading').style.display = 'block';
+
+    get(userRef).then((snapshot) => {
+        // Hide the loading message or spinner
+        document.getElementById('loading').style.display = 'none';
+
+        if (snapshot.exists()) {
+            const userWallet = snapshot.val().wallet;
+            document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`; // Display balance
+            document.getElementById('amount').max = Math.min(userWallet, 1000); // Set max value of the range slider
+        } else {
+            console.error("No wallet data available.");
+        }
+    }).catch((error) => {
+        console.error("Error retrieving user data: ", error);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('message').textContent = "Failed to retrieve user data.";
+    });
+} else {
+    document.getElementById('balance-display').textContent = "User not found.";
+}
+
+
 
         </script>
-    </div>
+  
    
 </body>
 </html>
