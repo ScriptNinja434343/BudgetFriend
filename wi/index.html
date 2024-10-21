@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Bintex Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport meta for mobile scaling -->
+ 
     <style>
         body {
             margin: 0;
@@ -28,6 +27,7 @@
             left: 0;
             margin-bottom: 20px;
         }
+
         .header img {
             height: 30px;
         }
@@ -39,8 +39,9 @@
         .header .icons i {
             font-size: 20px;
         }
+
         .dashboard {
-            margin-top: 100px;
+            margin-top: 100px; /* Adjust for mobile */
         }
         .dashboard h1 {
             font-size: 24px;
@@ -60,6 +61,7 @@
         .asset-value p {
             margin: 5px 0;
         }
+
         .buttons {
             display: flex;
             gap: 10px;
@@ -81,66 +83,82 @@
             background-color: #d7ff00;
             color: #000;
         }
+
+        /* Slider Styles */
         input[type="range"] {
-            -webkit-appearance: none;
+            -webkit-appearance: none; /* Override default CSS styles */
             appearance: none;
-            width: 100%;
-            height: 50px;
+            width: 100%; /* Full-width */
+            height: 50px; /* Slider height */
             padding-left: 10px;
             padding-right: 10px;
-            background: #ffffff;
-            border-radius: 30px;
-            outline: none;
-            transition: background 0.3s;
+            background: #ffffff; /* Slider background */
+            border-radius: 30px; /* Rounded corners */
+            outline: none; /* No outline */
+            transition: background 0.3s; /* Transition effect */
         }
+
         input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
+            -webkit-appearance: none; /* Override default styles */
             appearance: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #eb86ff;
-            cursor: pointer;
+            width: 35px; /* Thumb width */
+            height: 35px; /* Thumb height */
+            border-radius: 50%; /* Circular thumb */
+            background: #eb86ff; /* Thumb color */
+            cursor: pointer; /* Pointer cursor on hover */
+            
         }
+
         input[type="range"]::-moz-range-thumb {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #d9ff00;
-            cursor: pointer;
+            width: 25px; /* Thumb width */
+            height: 25px; /* Thumb height */
+            border-radius: 50%; /* Circular thumb */
+            background: #d9ff00; /* Thumb color */
+            cursor: pointer; /* Pointer cursor on hover */
         }
+
         input[type="range"]:focus {
-            outline: none;
+            outline: none; /* No outline on focus */
         }
+
         input[type="range"]:hover {
-            background: #eb27f9;
+            background: #eb27f9; /* Change background on hover */
         }
+
+        /* Display Styles */
         #amount-display {
             margin-top: 10px;
             font-size: 18px;
         }
+        /* UPI ID Input Field Styles */
         #upi-id {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #eb86ff;
-            border-radius: 10px;
-            background-color: #ffffff;
-            color: #000;
-            font-size: 16px;
-            margin-bottom: 20px;
-            transition: border-color 0.3s;
+            width: 100%; /* Full width */
+            padding: 15px; /* Padding for comfort */
+            border: 2px solid #eb86ff; /* Border color */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #ffffff; /* Input background color */
+            color: #000; /* Text color */
+            font-size: 16px; /* Font size */
+            margin-bottom: 20px; /* Space below input */
+            transition: border-color 0.3s; /* Transition for focus effect */
         }
+
+        /* Change border color on focus */
         #upi-id:focus {
-            border-color: #fff;
-            outline: none;
+            border-color: #fff; /* Border color on focus */
+            outline: none; /* Remove outline */
         }
+
+        /* Media query for mobile responsiveness */
         @media (max-width: 768px) {
-            body {
+
+            body{
                 overflow: hidden;
             }
-            .icons {
+
+            .icons{
                 width: 100px;
-                font-size: 200px;
+                font-size: 200px    ;
             }
             .header {
                 flex-direction: column;
@@ -149,20 +167,20 @@
                 width: 95%;
             }
             .dashboard h1 {
-                font-size: 20px;
+                font-size: 20px; /* Smaller font size for headings */
             }
             .asset-value {
                 padding: 15px;
             }
             .asset-value h2 {
-                font-size: 28px;
+                font-size: 28px; /* Smaller balance font */
             }
             .buttons button {
-                padding: 10px;
+                padding: 10px; /* Smaller buttons for mobile */
                 font-size: 14px;
             }
             input[type="range"]::-webkit-slider-thumb {
-                width: 35px;
+                width: 35px; /* Smaller slider thumb */
                 height: 35px;
             }
             input[type="range"]::-moz-range-thumb {
@@ -170,13 +188,42 @@
                 height: 25px;
             }
             #upi-id {
-                padding: 12px;
+                padding: 12px; /* Smaller UPI input */
                 font-size: 14px;
             }
         }
+
+        .toast {
+            visibility: hidden; /* Hidden by default */
+            min-width: 250px; /* Minimum width */
+            margin-left: -125px; /* Center the toast */
+            background-color: #333; /* Black background */
+            color: #fff; /* White text */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded corners */
+            padding: 16px; /* Padding */
+            position: fixed; /* Position fixed */
+            z-index: 1; /* Sit on top */
+            left: 50%; /* Center horizontally */
+            bottom: 30px; /* 30px from the bottom */
+            font-size: 17px; /* Font size */
+            transition: visibility 0s, opacity 0.5s linear; /* Transition effects */
+        }
+        
+        .toast.show {
+            visibility: visible; /* Show the toast */
+            opacity: 1; /* Fade in */
+        }
+        
+        .toast.hide {
+            visibility: hidden; /* Hide the toast */
+            opacity: 0; /* Fade out */
+        }
+        
     </style>
 </head>
 <body>
+
     
     <div class="container">
         <div class="header">
@@ -190,95 +237,168 @@
                 <p>Current balance</p>
                 <h2 id="balance-display">₹0.00</h2>
             </div>
-            <input type="text" id="upi-id" placeholder="Enter UPI ID or Mobile Number" />
+            <input type="text" id="upi-id" placeholder="Enter UPI ID or Mobile Number" required />
             <div>
-                <input type="range" id="amount" min="200" max="1000" step="1" value="200">
+                <input type="range" id="amount" min="200" max="1000" step="1" value="200" required>
                 <p id="amount-display" style="margin-top: 20px; color:#bf0db2;">Min-Amount: ₹200.00</p>
             </div>
+
             <div class="buttons">
                 <button class="withdraw" id="withdraw-btn">Withdraw</button>
+    <div id="toast" class="toast"></div>
+
             </div>
+
             <p id="message" style="color: #ab08ae;"></p>
         </div>
-    </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-        import { getDatabase, ref, update, onValue, get } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+            import { getDatabase, ref, update, onValue , get } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
-            authDomain: "dropshipping-98eb5.firebaseapp.com",
-            projectId: "dropshipping-98eb5",
-            storageBucket: "dropshipping-98eb5.appspot.com",
-            messagingSenderId: "904925867242",
-            appId: "1:904925867242:web:af0abda866826e92f8fb93",
-            measurementId: "G-BVZR8HY1SR"
-        };
+            // Your Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyC3WxZBaNJoZA2p7oe6ihTJCFOE6Y0U_7Q",
+                authDomain: "dropshipping-98eb5.firebaseapp.com",
+                projectId: "dropshipping-98eb5",
+                storageBucket: "dropshipping-98eb5.appspot.com",
+                messagingSenderId: "904925867242",
+                appId: "1:904925867242:web:af0abda866826e92f8fb93",
+                measurementId: "G-BVZR8HY1SR"
+            };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
 
-        const userData = JSON.parse(localStorage.getItem('user'));
+            // Get logged-in user data from local storage
+            const userData = JSON.parse(localStorage.getItem('user')); // Ensure this matches your local storage key
 
-        // Fetch and display wallet balance on page load
-        if (userData && userData.uid) {
-            const userRef = ref(db, 'users/' + userData.uid);
-            onValue(userRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const userWallet = snapshot.val().wallet;
-                    if (userWallet !== undefined) {
-                        document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`;
-                        document.getElementById('amount').max = Math.min(userWallet, 1000);
+            // Fetch and display wallet balance on page load
+            if (userData && userData.uid) {
+                const userRef = ref(db, 'users/' + userData.uid);
+                onValue(userRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userWallet = snapshot.val().wallet;
+                        document.getElementById('balance-display').textContent = ` ₹${userWallet.toFixed(2)}`; // Display balance
+                        document.getElementById('amount').max = Math.min(userWallet, 1000); // Set max value of the range slider to the lesser of user balance or 1000
                     } else {
-                        document.getElementById('balance-display').textContent = "No wallet balance available.";
+                        console.error("No wallet data available.");
                     }
-                } else {
-                    console.error("No wallet data available.");
-                }
-            });
-        } else {
-            document.getElementById('balance-display').textContent = "User not found.";
-        }
-
-        document.getElementById('amount').oninput = function () {
-            const amount = parseFloat(this.value);
-            document.getElementById('amount-display').textContent = `Amount: ₹${amount.toFixed(2)}`;
-        };
-
-        document.getElementById('withdraw-btn').onclick = function () {
-            const amount = parseFloat(document.getElementById('amount').value);
-            const upiId = document.getElementById('upi-id').value;
-            const userRef = ref(db, 'users/' + userData.uid);
-
-            if (!upiId) {
-                document.getElementById('message').textContent = "Please enter a valid UPI ID.";
-                return;
+                });
+            } else {
+                document.getElementById('balance-display').textContent = "User not found.";
             }
 
-            onValue(userRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const userWallet = snapshot.val().wallet;
+            // Update amount display when slider is moved
+            document.getElementById('amount').oninput = function () {
+                const amount = parseFloat(this.value);
+                document.getElementById('amount-display').textContent = `Amount: ₹${amount.toFixed(2)}`;
+            };
 
-                    if (userWallet !== undefined && amount <= userWallet) {
-                        const newBalance = userWallet - amount;
-                        update(userRef, { wallet: newBalance })
-                            .then(() => {
-                                document.getElementById('message').textContent = "Withdrawal successful!";
-                                document.getElementById('balance-display').textContent = ` ₹${newBalance.toFixed(2)}`;
-                            })
-                            .catch((error) => {
-                                console.error("Error updating wallet balance:", error);
-                                document.getElementById('message').textContent = "Error during withdrawal.";
-                            });
-                    } else {
-                        document.getElementById('message').textContent = "Insufficient funds.";
-                    }
-                } else {
-                    document.getElementById('message').textContent = "No wallet data available.";
+
+
+            
+
+            
+
+
+// Withdraw button event listener
+// Disable the withdraw button initially
+document.getElementById('withdraw-btn').disabled = true;
+
+// Enable the button only if the UPI ID is entered
+document.getElementById('upi-id').oninput = function () {
+    const upiId = this.value.trim();
+    document.getElementById('withdraw-btn').disabled = !upiId; // Enable button if UPI ID is not empty
+};
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show'); // Add the show class to make it visible
+
+    // Hide the toast after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show'); // Remove the show class
+    }, 3000); // 3000 milliseconds = 3 seconds
+}
+
+document.getElementById('withdraw-btn').onclick = function () {
+    const amount = parseFloat(document.getElementById('amount').value);
+    const upiId = document.getElementById('upi-id').value.trim(); // Get UPI ID input
+    const userRef = ref(db, 'users/' + userData.uid);
+
+    if (!upiId) {
+        showToast("Please enter your UPI ID."); // Show toast if UPI ID is empty
+        return; // Exit if UPI ID is not provided
+    }
+
+    if (userData && userData.uid) {
+        // Retrieve the user's current wallet balance from Firebase
+        get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const userWallet = snapshot.val().wallet; // Assuming wallet balance is stored under 'wallet'
+
+                // Check if the amount exceeds the user's current balance
+                if (amount > userWallet) {
+                    showToast("Insufficient funds!"); // Show toast instead
+                    return; // Exit the function if not enough funds
                 }
-            });
-        };
-    </script>
+
+                // Check if the amount is below the minimum withdrawal limit
+                if (amount < 200) {
+                    showToast("Minimum withdrawal amount is ₹200."); // Show toast instead
+                    return; // Exit the function if amount is less than 200
+                }
+
+                // Calculate the new balance after withdrawal
+                const newBalance = userWallet - amount;
+
+                // Prepare the withdrawal data
+                const withdrawalData = {
+                    amount: amount,
+                    upiId: upiId,
+                    timestamp: new Date().toISOString() // Record the withdrawal timestamp
+                };
+
+                // Generate a unique key for each withdrawal
+                const withdrawalRef = ref(db, 'withdraw/' + userData.uid + '/' + Date.now()); // Use current timestamp as a unique key
+                update(withdrawalRef, withdrawalData).then(() => {
+                    // Update the user's wallet balance in Firebase
+                    update(userRef, { wallet: newBalance }).then(() => {
+                        showToast("Withdrawal successful!"); // Show toast instead
+                        // Update the displayed balance to reflect the new balance
+                        document.getElementById('balance-display').textContent = `₹${newBalance.toFixed(2)}`; 
+                        
+                        // Redirect to another page after a 3-second delay
+                        setTimeout(() => {
+                            window.location.href = 'success.html'; // Change 'success.html' to your target page
+                        }, 3000); // 3000 milliseconds = 3 seconds
+                    }).catch((error) => {
+                        console.error("Error updating wallet: ", error);
+                        showToast("Withdrawal failed. Please try again."); // Show toast instead
+                    });
+                }).catch((error) => {
+                    console.error("Error storing withdrawal data: ", error);
+                    showToast("Failed to store withdrawal data."); // Show toast instead
+                });
+            } else {
+                showToast("User not found."); // Show toast instead
+            }
+        }).catch((error) => {
+            console.error("Error retrieving user data: ", error);
+            showToast("Failed to retrieve user data."); // Show toast instead
+        });
+    } else {
+        showToast("User not found."); // Show toast instead
+    }
+};
+
+
+
+        </script>
+    </div>
+   
 </body>
 </html>
