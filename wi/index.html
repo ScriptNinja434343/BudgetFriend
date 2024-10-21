@@ -306,7 +306,6 @@
             
 
             
-
             function showToast(message) {
                 const toast = document.getElementById('toast');
                 toast.textContent = message; // Set the toast message
@@ -316,6 +315,12 @@
                 setTimeout(() => {
                     toast.classList.remove('show'); // Remove the show class
                 }, 3000); // 3000 milliseconds = 3 seconds
+            }
+            
+            function triggerVibration() {
+                if ("vibrate" in navigator) {
+                    navigator.vibrate(100); // Vibrate for 100 milliseconds
+                }
             }
             
             document.getElementById('withdraw-btn').onclick = function () {
@@ -390,8 +395,15 @@
                 }
             };
             
-
-
+            // Add the vibration when input changes
+            document.getElementById('amount').addEventListener('input', function () {
+                const amount = parseFloat(this.value);
+                // Assuming you want to vibrate if the amount is within a certain range, for example, between 200 and 5000
+                if (amount >= 200 && amount <= 5000) {
+                    triggerVibration(); // Trigger vibration
+                }
+            });
+            
         </script>
     </div>
    
